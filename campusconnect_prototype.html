@@ -1,0 +1,2050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CampusConnect — Enterprise Content Moderation & Cyber Libel Prototype</title>
+  <style>
+    :root {
+      /* Slate Neutral Palette */
+      --bg-app: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-subtle: #f1f5f9;
+      --bg-muted: #e2e8f0;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --text-faint: #94a3b8;
+      --border-default: #e2e8f0;
+      --border-strong: #cbd5e1;
+
+      /* Brand & Accent (Enterprise Indigo/Slate) */
+      --brand: #1e40af;
+      --brand-hover: #1e3a8a;
+      --brand-soft: #eff6ff;
+      --brand-border: #bfdbfe;
+
+      /* Semantic Status Colors */
+      --allow-bg: #f0fdf4;
+      --allow-border: #bbf7d0;
+      --allow-text: #15803d;
+      --allow-dot: #22c55e;
+
+      --flag-bg: #fffbeb;
+      --flag-border: #fde68a;
+      --flag-text: #b45309;
+      --flag-dot: #f59e0b;
+
+      --remove-bg: #fef2f2;
+      --remove-border: #fecaca;
+      --remove-text: #b91c1c;
+      --remove-dot: #ef4444;
+
+      /* Radii & Shadows */
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+      --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+      --shadow-lg: 0 20px 25px -5px rgba(15, 23, 42, 0.15), 0 8px 10px -6px rgba(15, 23, 42, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100vh;
+      overflow: hidden;
+      background-color: var(--bg-app);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+    }
+
+    button, input, textarea {
+      font-family: inherit;
+    }
+
+    /* =====================================================================
+       1. TOP PROTOTYPE UTILITY BAR (Ultra-Compact Presentation Helper)
+       ===================================================================== */
+    .presenter-bar {
+      height: 36px;
+      background-color: #090d16;
+      color: #cbd5e1;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #1e293b;
+      font-size: 11.5px;
+      flex-shrink: 0;
+      z-index: 50;
+    }
+    .presenter-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .presenter-label {
+      color: #64748b;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+    }
+    .pill-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      background: #111827;
+      padding: 2px;
+      border-radius: var(--radius-sm);
+      border: 1px solid #1f2937;
+    }
+    .p-btn {
+      background: transparent;
+      color: #94a3b8;
+      border: 1px solid transparent;
+      padding: 3px 9px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.12s ease;
+      white-space: nowrap;
+    }
+    .p-btn:hover {
+      color: #f8fafc;
+      background: #1e293b;
+    }
+    .p-btn.active {
+      background: #1e3a8a;
+      color: #ffffff;
+      border-color: #3b82f6;
+      font-weight: 600;
+    }
+    .p-btn.scen-active {
+      background: #064e3b;
+      color: #ecfdf5;
+      border-color: #10b981;
+      font-weight: 600;
+    }
+
+    /* =====================================================================
+       2. PRIMARY APP NAVIGATION BAR (Modern SaaS Styling)
+       ===================================================================== */
+    .app-navbar {
+      height: 58px;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-default);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      z-index: 40;
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-md);
+      background: var(--brand);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 2px rgba(30, 64, 175, 0.25);
+    }
+    .brand-name {
+      font-size: 16.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+    }
+    .brand-tag {
+      font-size: 10.5px;
+      font-weight: 600;
+      color: var(--brand);
+      background: var(--brand-soft);
+      border: 1px solid var(--brand-border);
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-left: 2px;
+    }
+
+    /* Standard SaaS Search Input (38px height, left icon padding) */
+    .search-wrapper {
+      position: relative;
+      width: 360px;
+    }
+    .search-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-faint);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+    }
+    .search-input {
+      width: 100%;
+      height: 38px;
+      padding: 0 14px 0 36px;
+      background: var(--bg-app);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color 0.15s, background-color 0.15s, box-shadow 0.15s;
+    }
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
+    .search-input:focus {
+      background: var(--bg-surface);
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+    }
+
+    /* Right Utilities */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-default);
+      background: var(--bg-surface);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.12s, color 0.12s;
+    }
+    .icon-btn:hover {
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+    }
+    .notif-counter {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: #dc2626;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      min-width: 16px;
+      height: 16px;
+      padding: 0 4px;
+      border-radius: 99px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--bg-surface);
+    }
+    .nav-divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border-default);
+      margin: 0 4px;
+    }
+    .profile-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 4px 8px 4px 4px;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .profile-badge:hover {
+      background: var(--bg-subtle);
+    }
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--brand-soft);
+      color: var(--brand);
+      border: 1px solid var(--brand-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+    .profile-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .profile-role {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* =====================================================================
+       3. THREE-COLUMN WORKSPACE SHELL (Constant Sidebars, Scrollable Center)
+       ===================================================================== */
+    .workspace-shell {
+      flex: 1;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 248px minmax(0, 1fr) 316px;
+      gap: 24px;
+      padding: 0 24px;
+      overflow: hidden;
+    }
+
+    /* LEFT SIDEBAR */
+    .left-sidebar {
+      padding: 20px 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      overflow-y: auto;
+    }
+    .nav-section {
+      margin-bottom: 20px;
+    }
+    .nav-section-header {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-faint);
+      padding: 0 12px 6px;
+    }
+    .side-link {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      border-radius: var(--radius-md);
+      border: none;
+      border-left: 3px solid transparent;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.12s ease;
+      margin-bottom: 2px;
+    }
+    .side-link-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .side-link svg {
+      width: 17px;
+      height: 17px;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      transition: color 0.12s;
+    }
+    .side-link:hover {
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+    }
+    .side-link:hover svg {
+      color: var(--text-primary);
+    }
+    .side-link.active {
+      background: var(--brand-soft);
+      color: var(--brand);
+      border-left-color: var(--brand);
+      font-weight: 600;
+    }
+    .side-link.active svg {
+      color: var(--brand);
+    }
+    .side-pill-count {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 1px 7px;
+      border-radius: 99px;
+      background: var(--bg-muted);
+      color: var(--text-secondary);
+    }
+    .side-link.active .side-pill-count {
+      background: #dbeafe;
+      color: var(--brand);
+    }
+    .sidebar-footer {
+      padding: 14px 12px 0;
+      border-top: 1px solid var(--border-default);
+      font-size: 11.5px;
+      color: var(--text-faint);
+      line-height: 1.5;
+    }
+
+    /* SCROLLABLE CENTER COLUMN */
+    .center-scroll {
+      height: 100%;
+      overflow-y: auto;
+      padding: 20px 4px 64px;
+      scroll-behavior: smooth;
+    }
+    .center-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+    .center-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 99px;
+    }
+
+    /* CONSTANT RIGHT SIDEBAR */
+    .right-sidebar {
+      padding: 20px 0;
+      height: 100%;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .right-sidebar::-webkit-scrollbar {
+      width: 0;
+    }
+
+    /* =====================================================================
+       4. SHARED CARD & COMPONENT STYLES
+       ===================================================================== */
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-xs);
+    }
+    .view {
+      display: none;
+    }
+    .view.active {
+      display: block;
+    }
+
+    /* Status Badges */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 99px;
+      line-height: 1.4;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    .badge-allow {
+      background: var(--allow-bg);
+      color: var(--allow-text);
+      border: 1px solid var(--allow-border);
+    }
+    .badge-allow .status-dot { background: var(--allow-dot); }
+
+    .badge-flag {
+      background: var(--flag-bg);
+      color: var(--flag-text);
+      border: 1px solid var(--flag-border);
+    }
+    .badge-flag .status-dot { background: var(--flag-dot); }
+
+    .badge-remove {
+      background: var(--remove-bg);
+      color: var(--remove-text);
+      border: 1px solid var(--remove-border);
+    }
+    .badge-remove .status-dot { background: var(--remove-dot); }
+
+    /* Standard Buttons */
+    .btn {
+      height: 36px;
+      padding: 0 14px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.12s ease;
+      white-space: nowrap;
+    }
+    .btn-sm {
+      height: 30px;
+      padding: 0 10px;
+      font-size: 12px;
+    }
+    .btn-primary {
+      background: var(--brand);
+      color: #ffffff;
+    }
+    .btn-primary:hover {
+      background: var(--brand-hover);
+    }
+    .btn-outline {
+      background: var(--bg-surface);
+      border-color: var(--border-strong);
+      color: var(--text-secondary);
+    }
+    .btn-outline:hover {
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+    }
+
+    /* =====================================================================
+       5. SCREEN 1: SOCIAL MEDIA FEED
+       ===================================================================== */
+    .composer-trigger-card {
+      padding: 16px 20px;
+    }
+    .composer-prompt-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .composer-trigger-btn {
+      flex: 1;
+      height: 40px;
+      background: var(--bg-app);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      padding: 0 14px;
+      font-size: 13.5px;
+      color: var(--text-muted);
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 0.12s, background 0.12s;
+    }
+    .composer-trigger-btn:hover {
+      background: var(--bg-subtle);
+      border-color: var(--border-strong);
+    }
+
+    .post-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      gap: 12px;
+    }
+    .post-author-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .post-author-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .post-author-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .post-body-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      margin-bottom: 14px;
+    }
+    .attachment-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .mock-window {
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      background: var(--bg-app);
+      overflow: hidden;
+    }
+    .mock-window-bar {
+      background: var(--bg-subtle);
+      border-bottom: 1px solid var(--border-default);
+      padding: 6px 10px;
+      font-size: 11px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .win-dots {
+      display: inline-flex;
+      gap: 4px;
+    }
+    .win-dots i {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--border-strong);
+      display: inline-block;
+    }
+    .mock-window-body {
+      padding: 18px 14px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .post-footer-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-default);
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+    .post-action-group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .feed-action-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 12.5px;
+      font-weight: 500;
+      padding: 6px 10px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.12s, color 0.12s;
+    }
+    .feed-action-btn:hover {
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+    }
+    .feed-action-btn.report:hover {
+      background: var(--remove-bg);
+      color: var(--remove-text);
+    }
+
+    /* =====================================================================
+       6. SCREEN 2: CREATE A POST
+       ===================================================================== */
+    .card-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-default);
+      margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+    .card-subtitle {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .composer-textarea {
+      width: 100%;
+      min-height: 130px;
+      padding: 12px 14px;
+      background: var(--bg-app);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      font-size: 14px;
+      line-height: 1.6;
+      color: var(--text-primary);
+      resize: vertical;
+      margin: 14px 0;
+      outline: none;
+      transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+    }
+    .composer-textarea:focus {
+      background: var(--bg-surface);
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(30, 64, 175, 0.1);
+    }
+    .composer-Subbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      background: var(--bg-app);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      margin-bottom: 16px;
+    }
+
+    /* =====================================================================
+       7. SCREEN 4: MODERATION DASHBOARD (Enterprise Queue & Audit Layout)
+       ===================================================================== */
+    /* Analytic Status Tabs (3 Unified Outcome Cards) */
+    .outcome-tabs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .outcome-tab {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .outcome-tab::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+    }
+    .outcome-tab.tab-allow::before { background: var(--allow-dot); }
+    .outcome-tab.tab-flag::before  { background: var(--flag-dot); }
+    .outcome-tab.tab-remove::before { background: var(--remove-dot); }
+
+    .outcome-tab:hover {
+      border-color: var(--border-strong);
+      background: var(--bg-app);
+    }
+    .outcome-tab.active-tab {
+      background: var(--bg-app);
+      border-color: #94a3b8;
+      box-shadow: var(--shadow-xs);
+    }
+    .outcome-tab-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+    .outcome-tab-label {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .outcome-tab-count {
+      font-size: 11px;
+      font-weight: 700;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
+    }
+    .outcome-tab-desc {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+
+    /* Queue Metadata Bar */
+    .queue-meta-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .mono-id {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-default);
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+    }
+
+    /* Nested Authentic Social Feed Card inside Moderation Queue */
+    .nested-feed-wrapper {
+      background: var(--bg-app);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 18px;
+    }
+    .nested-feed-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nested-social-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      box-shadow: var(--shadow-xs);
+    }
+
+    /* Clean Two-Column Key-Value Grid Table */
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .kv-table-wrap {
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+    .kv-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .kv-table tr:not(:last-child) {
+      border-bottom: 1px solid var(--border-default);
+    }
+    .kv-table th {
+      width: 34%;
+      background: var(--bg-app);
+      color: var(--text-muted);
+      font-weight: 600;
+      text-align: left;
+      padding: 10px 14px;
+      border-right: 1px solid var(--border-default);
+      font-size: 12.5px;
+    }
+    .kv-table td {
+      padding: 10px 14px;
+      color: var(--text-primary);
+      background: var(--bg-surface);
+    }
+
+    /* 2x2 Custom Legal Checklist Cards */
+    .legal-checklist-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .legal-check-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 11px 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-default);
+      background: var(--bg-surface);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.12s ease;
+    }
+    .legal-check-card:hover {
+      border-color: var(--border-strong);
+    }
+    .legal-check-card.checked {
+      background: #f8fafc;
+      border-color: #94a3b8;
+    }
+    .legal-check-card input {
+      display: none;
+    }
+    .custom-check-indicator {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      border: 1.5px solid var(--border-strong);
+      background: var(--bg-surface);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+      flex-shrink: 0;
+      color: transparent;
+      transition: all 0.12s ease;
+    }
+    .legal-check-card.checked .custom-check-indicator {
+      background: var(--brand);
+      border-color: var(--brand);
+      color: #ffffff;
+    }
+    .check-card-title {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.3;
+    }
+    .check-card-sub {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      line-height: 1.35;
+    }
+
+    /* Moderator Action CTA Row */
+    .mod-cta-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-default);
+    }
+    .cta-action-btn {
+      height: 40px;
+      border-radius: var(--radius-md);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      transition: all 0.12s ease;
+    }
+    .cta-approve {
+      background: var(--allow-bg);
+      color: var(--allow-text);
+      border: 1px solid var(--allow-border);
+    }
+    .cta-approve:hover {
+      background: #dcfce7;
+      border-color: #86efac;
+    }
+    .cta-flag {
+      background: var(--flag-bg);
+      color: var(--flag-text);
+      border: 1px solid var(--flag-border);
+    }
+    .cta-flag:hover {
+      background: #fef3c7;
+      border-color: #fcd34d;
+    }
+    .cta-restrict {
+      background: var(--remove-bg);
+      color: var(--remove-text);
+      border: 1px solid var(--remove-border);
+    }
+    .cta-restrict:hover {
+      background: #fee2e2;
+      border-color: #fca5a5;
+    }
+
+    /* =====================================================================
+       8. RIGHT SIDEBAR WIDGETS
+       ===================================================================== */
+    .widget-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: var(--shadow-xs);
+    }
+    .widget-header {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .guideline-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .guideline-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 12.5px;
+      line-height: 1.45;
+      color: var(--text-secondary);
+    }
+    .guideline-icon-box {
+      width: 22px;
+      height: 22px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .announcement-item {
+      padding-bottom: 11px;
+      margin-bottom: 11px;
+      border-bottom: 1px solid var(--border-default);
+    }
+    .announcement-item:last-child {
+      padding-bottom: 0;
+      margin-bottom: 0;
+      border-bottom: none;
+    }
+    .ann-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 3px;
+    }
+    .ann-title {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .date-badge {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: var(--bg-subtle);
+      color: var(--text-muted);
+      border: 1px solid var(--border-default);
+    }
+    .ann-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .member-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .member-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 0;
+    }
+    .member-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .member-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-strong);
+      font-size: 11px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .member-name {
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    .online-indicator {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+    }
+
+    /* =====================================================================
+       9. SCREEN 3: CONTENT WARNING MODAL
+       ===================================================================== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(2px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 60;
+      padding: 20px;
+    }
+    .modal-overlay.open {
+      display: flex;
+    }
+    .warning-dialog {
+      background: var(--bg-surface);
+      max-width: 500px;
+      width: 100%;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-default);
+      overflow: hidden;
+    }
+    .warning-dialog-top {
+      background: var(--flag-bg);
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--flag-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--flag-text);
+    }
+    .warning-dialog-body {
+      padding: 20px;
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.55;
+    }
+    .warning-reason-box {
+      background: var(--bg-app);
+      border: 1px solid var(--border-default);
+      border-left: 3px solid var(--flag-dot);
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      margin: 14px 0;
+      font-size: 13px;
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===================================================================
+       1. TOP PROTOTYPE UTILITY BAR (Presentation Switchers)
+       =================================================================== -->
+  <div class="presenter-bar">
+    <div class="presenter-group">
+      <span class="presenter-label">Figma Screen</span>
+      <div class="pill-switch">
+        <button class="p-btn active" id="sbtn-1" onclick="jumpScreen(1)">1. Social Feed</button>
+        <button class="p-btn" id="sbtn-2" onclick="jumpScreen(2)">2. Create Post</button>
+        <button class="p-btn" id="sbtn-3" onclick="jumpScreen(3)">3. Content Warning</button>
+        <button class="p-btn" id="sbtn-4" onclick="jumpScreen(4)">4. Mod Dashboard</button>
+        <button class="p-btn" id="sbtn-5" onclick="jumpScreen(5)">5. Decision & Appeal</button>
+      </div>
+    </div>
+
+    <div class="presenter-group">
+      <span class="presenter-label">Load Scenario</span>
+      <div class="pill-switch">
+        <button class="p-btn" id="scenbtn-1" onclick="loadScenario(1)">Scenario 1: Enrollment</button>
+        <button class="p-btn" id="scenbtn-3" onclick="loadScenario(3)">Scenario 3: Theft Claim</button>
+        <button class="p-btn scen-active" id="scenbtn-5" onclick="loadScenario(5)">Scenario 5: Grade Rumor</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================
+       2. PRIMARY APP NAVIGATION BAR (Modern SaaS Header)
+       =================================================================== -->
+  <header class="app-navbar">
+    <div class="nav-left">
+      <div class="brand" onclick="jumpScreen(1)">
+        <div class="brand-logo">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <span class="brand-name">CampusConnect</span>
+        <span class="brand-tag">Trust &amp; Safety</span>
+      </div>
+
+      <div class="search-wrapper">
+        <span class="search-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </span>
+        <input type="text" class="search-input" placeholder="Search campus posts, case IDs, or topics..." />
+      </div>
+    </div>
+
+    <div class="nav-right">
+      <button class="icon-btn" onclick="jumpScreen(4)" title="Moderation Queue">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+        </svg>
+        <span class="notif-counter">3</span>
+      </button>
+
+      <div class="nav-divider"></div>
+
+      <div class="profile-badge" onclick="jumpScreen(1)">
+        <div class="avatar">TC</div>
+        <div class="profile-info">
+          <span class="profile-name">Tristan Amiel Clemen</span>
+          <span class="profile-role">BSIT 4C • Student Moderator</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================================================================
+       3. THREE-COLUMN WORKSPACE SHELL
+       =================================================================== -->
+  <div class="workspace-shell">
+
+    <!-- ===============================================================
+         CONSTANT LEFT SIDEBAR
+         =============================================================== -->
+    <aside class="left-sidebar">
+      <div>
+        <div class="nav-section">
+          <div class="nav-section-header">Platform</div>
+          <button class="side-link active" id="lnav-1" onclick="jumpScreen(1)">
+            <span class="side-link-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+              <span>Campus Feed</span>
+            </span>
+          </button>
+
+          <button class="side-link" id="lnav-2" onclick="jumpScreen(2)">
+            <span class="side-link-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+              <span>Create Post</span>
+            </span>
+          </button>
+
+          <button class="side-link" onclick="jumpScreen(1)">
+            <span class="side-link-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              <span>BSIT 4C Community</span>
+            </span>
+          </button>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-header">Moderation &amp; Safety</div>
+          <button class="side-link" id="lnav-4" onclick="jumpScreen(4)">
+            <span class="side-link-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              <span>Moderation Queue</span>
+            </span>
+            <span class="side-pill-count">3</span>
+          </button>
+
+          <button class="side-link" id="lnav-5" onclick="jumpScreen(5)">
+            <span class="side-link-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              <span>Decisions &amp; Appeals</span>
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div style="font-weight: 600; color: var(--text-muted);">CampusConnect v2.4</div>
+        <div>Cyber Libel Awareness PIT</div>
+        <div>BSIT 4C • Group 4 © 2026</div>
+      </div>
+    </aside>
+
+    <!-- ===============================================================
+         SCROLLABLE MIDDLE COLUMN
+         =============================================================== -->
+    <main class="center-scroll" id="centerScroll">
+
+      <!-- -------------------------------------------------------------
+           SCREEN 1: SOCIAL MEDIA FEED
+           ------------------------------------------------------------- -->
+      <section class="view active" id="view-1">
+        <div class="card composer-trigger-card">
+          <div class="composer-prompt-row">
+            <div class="avatar">TC</div>
+            <button class="composer-trigger-btn" onclick="jumpScreen(2)">
+              Share a campus update, service concern, or discussion...
+            </button>
+            <button class="btn btn-primary" onclick="jumpScreen(2)">Create Post</button>
+          </div>
+        </div>
+
+        <!-- Post 1: Scenario 1 (Allowed) -->
+        <article class="card">
+          <div class="post-header">
+            <div class="post-author-group">
+              <div class="avatar" style="background:#f0fdf4; color:#15803d; border-color:#bbf7d0;">CM</div>
+              <div>
+                <div class="post-author-name">Carlos Mendoza</div>
+                <div class="post-author-meta">
+                  <span>BSIT 4th Year</span>
+                  <span>•</span>
+                  <span>2 hours ago</span>
+                </div>
+              </div>
+            </div>
+            <span class="status-badge badge-allow">
+              <span class="status-dot"></span>Allowed Post
+            </span>
+          </div>
+
+          <p class="post-body-text">
+            The university's online enrollment portal is extremely slow. Students are experiencing unnecessary delays, and the IT department should improve its performance so we can finish enrolling on time.
+          </p>
+
+          <div class="attachment-grid">
+            <div class="mock-window">
+              <div class="mock-window-bar">
+                <span class="win-dots"><i></i><i></i><i></i></span>
+                <span>enrollment.university.edu.ph</span>
+              </div>
+              <div class="mock-window-body">
+                <strong style="display:block; color:var(--text-primary); margin-bottom:2px;">Enrollment Portal</strong>
+                <span>Loading student subjects... Request timed out.</span>
+              </div>
+            </div>
+            <div class="mock-window" style="border-color:var(--remove-border); background:var(--remove-bg);">
+              <div class="mock-window-bar" style="background:#fee2e2; border-color:var(--remove-border); color:var(--remove-text);">
+                <span class="win-dots"><i></i><i></i><i></i></span>
+                <span>504 Gateway Timeout</span>
+              </div>
+              <div class="mock-window-body" style="color:var(--remove-text);">
+                <strong style="display:block; margin-bottom:2px;">Connection Error</strong>
+                <span>The enrollment server is currently overloaded.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="post-footer-bar">
+            <span>286 Likes • 84 Comments</span>
+            <div class="post-action-group">
+              <button class="feed-action-btn" onclick="this.textContent='Liked (287)'">Like</button>
+              <button class="feed-action-btn">Comment</button>
+              <button class="feed-action-btn">Share</button>
+              <button class="feed-action-btn report" onclick="reportPost(1)">Report</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Post 2: Scenario 5 (Flagged for Review) -->
+        <article class="card">
+          <div class="post-header">
+            <div class="post-author-group">
+              <div class="avatar" style="background:#fffbeb; color:#b45309; border-color:#fde68a;">JV</div>
+              <div>
+                <div class="post-author-name">Jessa Villanueva</div>
+                <div class="post-author-meta">
+                  <span>BSIT 3rd Year</span>
+                  <span>•</span>
+                  <span>4 hours ago</span>
+                </div>
+              </div>
+            </div>
+            <span class="status-badge badge-flag">
+              <span class="status-dot"></span>Flagged for Review
+            </span>
+          </div>
+
+          <p class="post-body-text">
+            I just received an anonymous message claiming that Registrar staff member Mr. Hector Dizon has been manipulating students' final grades. Sharing this here so everyone knows what is circulating!
+          </p>
+
+          <div class="post-footer-bar">
+            <span>142 Likes • 53 Comments</span>
+            <div class="post-action-group">
+              <button class="feed-action-btn" onclick="this.textContent='Liked (143)'">Like</button>
+              <button class="feed-action-btn">Comment</button>
+              <button class="feed-action-btn">Share</button>
+              <button class="feed-action-btn report" onclick="reportPost(5)">Report</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Post 3: Scenario 3 (Restricted Post) -->
+        <article class="card">
+          <div class="post-header">
+            <div class="post-author-group">
+              <div class="avatar" style="background:#fef2f2; color:#b91c1c; border-color:#fecaca;">RD</div>
+              <div>
+                <div class="post-author-name">Ryan Dela Cruz</div>
+                <div class="post-author-meta">
+                  <span>BSCS 4th Year</span>
+                  <span>•</span>
+                  <span>6 hours ago</span>
+                </div>
+              </div>
+            </div>
+            <span class="status-badge badge-remove">
+              <span class="status-dot"></span>Restricted Post
+            </span>
+          </div>
+
+          <p class="post-body-text">
+            Mark stole ₱30,000 from our capstone project budget! He is a thief and used our group funds for his personal expenses. He should be expelled from the university immediately!
+          </p>
+
+          <div class="post-footer-bar">
+            <span>410 Likes • 219 Comments</span>
+            <div class="post-action-group">
+              <button class="feed-action-btn" onclick="this.textContent='Liked (411)'">Like</button>
+              <button class="feed-action-btn">Comment</button>
+              <button class="feed-action-btn">Share</button>
+              <button class="feed-action-btn report" onclick="reportPost(3)">Report</button>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <!-- -------------------------------------------------------------
+           SCREEN 2: CREATE A POST
+           ------------------------------------------------------------- -->
+      <section class="view" id="view-2">
+        <div class="card">
+          <div class="card-header-bar">
+            <div>
+              <h2 class="card-title">Create a Post</h2>
+              <p class="card-subtitle">Publish updates or feedback to the BSIT Student Community.</p>
+            </div>
+            <span class="mono-id">Visibility: Campus Public</span>
+          </div>
+
+          <div class="post-author-group">
+            <div class="avatar">TC</div>
+            <div>
+              <div class="post-author-name">Tristan Amiel Clemen</div>
+              <div class="post-author-meta">BSIT 4C • Posting to Campus Feed</div>
+            </div>
+          </div>
+
+          <textarea class="composer-textarea" id="composerInput" placeholder="Write your post here...">Mark stole ₱30,000 from our capstone project budget! He is a thief and used our group funds for his personal expenses. He should be expelled from the university immediately!</textarea>
+
+          <!-- Attachment Preview (Scenario 1) -->
+          <div class="attachment-grid" id="composerAttachments" style="display:none;">
+            <div class="mock-window">
+              <div class="mock-window-bar">enrollment_loading.png</div>
+              <div class="mock-window-body">Enrollment Portal Timeout Screenshot</div>
+            </div>
+            <div class="mock-window" style="border-color:var(--remove-border); background:var(--remove-bg);">
+              <div class="mock-window-bar" style="background:#fee2e2; color:var(--remove-text);">gateway_error_504.png</div>
+              <div class="mock-window-body" style="color:var(--remove-text);">504 Server Timeout Screenshot</div>
+            </div>
+          </div>
+
+          <div class="composer-Subbar">
+            <span style="font-size:12px; font-weight:600; color:var(--text-muted);">Attachments</span>
+            <div style="display:flex; gap:8px;">
+              <button class="btn btn-outline btn-sm" onclick="toggleAttachmentPreview()">Attach Screenshot</button>
+              <button class="btn btn-outline btn-sm">Tag Classmate</button>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:10px;">
+            <button class="btn btn-outline" onclick="jumpScreen(1)">Cancel</button>
+            <button class="btn btn-primary" onclick="submitComposerPost()">Publish Post</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------
+           SCREEN 4: CONTENT MODERATION DASHBOARD
+           ------------------------------------------------------------- -->
+      <section class="view" id="view-4">
+        <div class="card">
+          <!-- Single Tidy Flex Row Header & Pagination Controls -->
+          <div class="card-header-bar">
+            <div>
+              <h2 class="card-title">Content Moderation Dashboard</h2>
+              <p class="card-subtitle">Queue Review • Chapter VI Cyber Libel Evaluation</p>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <button class="btn btn-outline btn-sm" onclick="stepScenario(-1)">&lt; Prev</button>
+              <button class="btn btn-outline btn-sm" onclick="stepScenario(1)">Next &gt;</button>
+            </div>
+          </div>
+
+          <!-- 3 Unified Analytic Status Tabs -->
+          <div class="outcome-tabs-grid">
+            <button class="outcome-tab tab-allow" id="otab-1" onclick="loadScenario(1)">
+              <div class="outcome-tab-top">
+                <span class="outcome-tab-label">Allow Post</span>
+                <span class="outcome-tab-count">1</span>
+              </div>
+              <div class="outcome-tab-desc">Lawful system criticism</div>
+            </button>
+
+            <button class="outcome-tab tab-flag active-tab" id="otab-5" onclick="loadScenario(5)">
+              <div class="outcome-tab-top">
+                <span class="outcome-tab-label">Flag for Review</span>
+                <span class="outcome-tab-count">1</span>
+              </div>
+              <div class="outcome-tab-desc">Unverified rumor pending proof</div>
+            </button>
+
+            <button class="outcome-tab tab-remove" id="otab-3" onclick="loadScenario(3)">
+              <div class="outcome-tab-top">
+                <span class="outcome-tab-label">Remove / Restrict</span>
+                <span class="outcome-tab-count">1</span>
+              </div>
+              <div class="outcome-tab-desc">Defamatory accusation</div>
+            </button>
+          </div>
+
+          <!-- Flagged Content Card (Authentic Social Feed Card Nested in Queue) -->
+          <div class="nested-feed-wrapper">
+            <div class="nested-feed-label">
+              <span>Flagged Post Under Review</span>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span class="mono-id" id="modCaseLabel">Case #RPT-2026-00215</span>
+                <span class="status-badge badge-flag" id="modAlertPill">
+                  <span class="status-dot"></span>Flagged: Unverified Rumor
+                </span>
+              </div>
+            </div>
+
+            <div class="nested-social-card">
+              <div class="post-header" style="margin-bottom:8px;">
+                <div class="post-author-group">
+                  <div class="avatar" id="modAvatar" style="background:#fffbeb; color:#b45309; border-color:#fde68a;">JV</div>
+                  <div>
+                    <div class="post-author-name" id="modAuthor">Jessa Villanueva</div>
+                    <div class="post-author-meta" id="modSub">BSIT 3rd Year • Reported by 3 users • Public Feed</div>
+                  </div>
+                </div>
+              </div>
+              <p class="post-body-text" id="modText" style="margin-bottom:0;">
+                I just received an anonymous message claiming that Registrar staff member Mr. Hector Dizon has been manipulating students' final grades. Sharing this here so everyone knows what is circulating!
+              </p>
+            </div>
+          </div>
+
+          <!-- Clean Two-Column Key-Value Report Details Table -->
+          <div class="section-label">Report Details &amp; Metadata</div>
+          <div class="kv-table-wrap">
+            <table class="kv-table">
+              <tr>
+                <th>Case Reference ID</th>
+                <td><span class="mono-id" id="modTableId">RPT-2026-00215</span></td>
+              </tr>
+              <tr>
+                <th>Reason for Flagging</th>
+                <td id="modReason">Republishing an unverified rumor naming a university employee</td>
+              </tr>
+              <tr>
+                <th>Target Individual / Entity</th>
+                <td id="modTarget" style="font-weight:600;">Mr. Hector Dizon (University Employee)</td>
+              </tr>
+              <tr>
+                <th>Identifiability Assessment</th>
+                <td id="modIdent">
+                  <span class="status-badge badge-flag"><span class="status-dot"></span>Yes — Employee is named</span>
+                </td>
+              </tr>
+              <tr>
+                <th>Supporting Evidence</th>
+                <td id="modEvidence">Anonymous rumor only (Requires verification)</td>
+              </tr>
+            </table>
+          </div>
+
+          <!-- 2x2 Styled Legal Checklist Grid -->
+          <div class="section-label">Chapter VI Cyber Libel Checklist</div>
+          <div class="legal-checklist-grid">
+            <label class="legal-check-card checked" id="lcard-1" onclick="toggleCheckCard(1, event)">
+              <input type="checkbox" checked id="chk1" />
+              <span class="custom-check-indicator">✓</span>
+              <div>
+                <div class="check-card-title">1. Public Publication</div>
+                <div class="check-card-sub">Published publicly on CampusConnect</div>
+              </div>
+            </label>
+
+            <label class="legal-check-card checked" id="lcard-2" onclick="toggleCheckCard(2, event)">
+              <input type="checkbox" checked id="chk2" />
+              <span class="custom-check-indicator">✓</span>
+              <div>
+                <div class="check-card-title">2. Defamatory Imputation</div>
+                <div class="check-card-sub">Imputes a crime, vice, or official misconduct</div>
+              </div>
+            </label>
+
+            <label class="legal-check-card checked" id="lcard-3" onclick="toggleCheckCard(3, event)">
+              <input type="checkbox" checked id="chk3" />
+              <span class="custom-check-indicator">✓</span>
+              <div>
+                <div class="check-card-title">3. Identifiable Target</div>
+                <div class="check-card-sub">Subject is explicitly named or identifiable</div>
+              </div>
+            </label>
+
+            <label class="legal-check-card checked" id="lcard-4" onclick="toggleCheckCard(4, event)">
+              <input type="checkbox" checked id="chk4" />
+              <span class="custom-check-indicator">✓</span>
+              <div>
+                <div class="check-card-title">4. Malice / Unverified</div>
+                <div class="check-card-sub">Knowingly false or reckless lack of proof</div>
+              </div>
+            </label>
+          </div>
+
+          <!-- Moderator Action CTA Buttons -->
+          <div class="mod-cta-bar">
+            <button class="cta-action-btn cta-approve" onclick="applyDecision('allow')">
+              <span>✓</span> Approve / Allow
+            </button>
+            <button class="cta-action-btn cta-flag" onclick="applyDecision('flag')">
+              <span>⚑</span> Flag for Human Review
+            </button>
+            <button class="cta-action-btn cta-restrict" onclick="applyDecision('remove')">
+              <span>✕</span> Restrict / Remove Post
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- -------------------------------------------------------------
+           SCREEN 5: MODERATION DECISION & APPEAL
+           ------------------------------------------------------------- -->
+      <section class="view" id="view-5">
+        <div class="card">
+          <div class="card-header-bar">
+            <div>
+              <h2 class="card-title">Moderation Decision &amp; Appeal</h2>
+              <p class="card-subtitle">Case Resolution &amp; Chapter VI Legal Rationale</p>
+            </div>
+            <span class="status-badge badge-allow" style="background:var(--brand-soft); color:var(--brand); border-color:var(--brand-border);">
+              Human Review Completed
+            </span>
+          </div>
+
+          <div class="nested-feed-wrapper" style="margin-bottom:16px;">
+            <div class="nested-feed-label">
+              <span id="decAuthor">Ryan Dela Cruz • BSCS 4th Year</span>
+              <span class="mono-id" id="decCaseId">Case #RPT-2026-00324</span>
+            </div>
+            <div class="nested-social-card">
+              <p class="post-body-text" id="decText" style="margin-bottom:0;">
+                "Mark stole ₱30,000 from our capstone project budget! He is a thief and used our group funds for his personal expenses. He should be expelled from the university immediately!"
+              </p>
+            </div>
+          </div>
+
+          <div id="decBanner" style="background:var(--remove-bg); border:1px solid var(--remove-border); border-radius:var(--radius-md); padding:16px; margin-bottom:14px;">
+            <h3 style="color:var(--remove-text); font-size:15.5px; font-weight:700; margin-bottom:4px;" id="decTitle">
+              Post Restricted After Human Review
+            </h3>
+            <p style="font-size:13px; color:var(--text-secondary); line-height:1.55;" id="decDesc">
+              After human moderator review, this post has been restricted because it contains a knowingly false accusation of theft against an identifiable student (Mark) and may severely damage his reputation.
+            </p>
+          </div>
+
+          <div style="background:var(--bg-app); border:1px solid var(--border-default); border-radius:var(--radius-md); padding:15px; margin-bottom:18px;">
+            <div class="section-label" style="margin-bottom:4px;">Decision Rationale (Chapter VI Application)</div>
+            <p style="font-size:13px; color:var(--text-secondary); line-height:1.55;" id="decRationale">
+              Under CampusConnect rules and Chapter VI (Cyber Libel Law), publicly imputing a crime (stealing ₱30,000) to an identifiable student with knowledge of falsity satisfies the elements of defamation (imputation, publication, identifiability, and malice).
+            </p>
+          </div>
+
+          <div style="border-top:1px solid var(--border-default); padding-top:16px;">
+            <div class="section-label">Submit Formal Appeal</div>
+            <div id="appealConfirmation" style="display:none; background:var(--allow-bg); border:1px solid var(--allow-border); color:var(--allow-text); padding:10px 12px; border-radius:var(--radius-md); font-size:12.5px; font-weight:500; margin-bottom:10px;">
+              ✓ Appeal Logged (Ref #AP-1032) — Queued for secondary moderator evaluation within 3 working days.
+            </div>
+            <textarea class="composer-textarea" style="min-height:72px; font-size:13px; margin:6px 0 12px;" placeholder="Provide supporting documentation or context to appeal this moderation decision..."></textarea>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <button class="btn btn-outline" onclick="jumpScreen(1)">← Back to Feed</button>
+              <button class="btn btn-primary" onclick="document.getElementById('appealConfirmation').style.display='block'">Submit Appeal</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ===============================================================
+         CONSTANT RIGHT SIDEBAR (Clean Distinct White Cards)
+         =============================================================== -->
+    <aside class="right-sidebar">
+
+      <!-- Widget 1: Post Responsibly -->
+      <div class="widget-card">
+        <div class="widget-header">
+          <span>Post Responsibly</span>
+          <span class="date-badge">Policy</span>
+        </div>
+        <div class="guideline-list">
+          <div class="guideline-row">
+            <span class="guideline-icon-box" style="background:var(--allow-bg); color:var(--allow-text); border:1px solid var(--allow-border);">✓</span>
+            <div>
+              <strong style="color:var(--text-primary);">Service criticism is protected</strong><br/>
+              Reporting slow campus portals with factual screenshots is lawful expression.
+            </div>
+          </div>
+          <div class="guideline-row">
+            <span class="guideline-icon-box" style="background:var(--flag-bg); color:var(--flag-text); border:1px solid var(--flag-border);">⚑</span>
+            <div>
+              <strong style="color:var(--text-primary);">Verify before sharing</strong><br/>
+              Unverified rumors naming staff are held for moderator verification.
+            </div>
+          </div>
+          <div class="guideline-row">
+            <span class="guideline-icon-box" style="background:var(--remove-bg); color:var(--remove-text); border:1px solid var(--remove-border);">✕</span>
+            <div>
+              <strong style="color:var(--text-primary);">No false accusations</strong><br/>
+              Knowingly false claims of theft violate Chapter VI Cyber Libel Law.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Widget 2: Campus Announcements -->
+      <div class="widget-card">
+        <div class="widget-header">
+          <span>Campus Announcements</span>
+        </div>
+        <div class="announcement-item">
+          <div class="ann-top">
+            <span class="ann-title">Enrollment Server Upgrade</span>
+            <span class="date-badge">Nov 18</span>
+          </div>
+          <div class="ann-desc">IT Services deployed additional nodes to resolve enlistment portal timeouts.</div>
+        </div>
+        <div class="announcement-item">
+          <div class="ann-top">
+            <span class="ann-title">Cybercrime Awareness Forum</span>
+            <span class="date-badge">Nov 22</span>
+          </div>
+          <div class="ann-desc">Symposium on Freedom of Expression and R.A. 10175 Cyber Libel guidelines.</div>
+        </div>
+      </div>
+
+      <!-- Widget 3: Group Members (BSIT 4C - G4) -->
+      <div class="widget-card">
+        <div class="widget-header">
+          <span>Group Members</span>
+          <span class="date-badge">BSIT 4C - G4</span>
+        </div>
+        <div class="member-list">
+          <div class="member-row">
+            <div class="member-left">
+              <div class="member-avatar">JA</div>
+              <span class="member-name">Julianna Joyce Alasan</span>
+            </div>
+            <span class="online-indicator"></span>
+          </div>
+          <div class="member-row">
+            <div class="member-left">
+              <div class="member-avatar">TC</div>
+              <span class="member-name">Tristan Amiel Clemen</span>
+            </div>
+            <span class="online-indicator"></span>
+          </div>
+          <div class="member-row">
+            <div class="member-left">
+              <div class="member-avatar">PM</div>
+              <span class="member-name">Penelope Macarayan</span>
+            </div>
+            <span class="online-indicator"></span>
+          </div>
+          <div class="member-row">
+            <div class="member-left">
+              <div class="member-avatar">JP</div>
+              <span class="member-name">Joselito Pechares Jr.</span>
+            </div>
+            <span class="online-indicator"></span>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+  </div>
+
+  <!-- ===================================================================
+       SCREEN 3: CONTENT WARNING MODAL
+       =================================================================== -->
+  <div class="modal-overlay" id="warningModal">
+    <div class="warning-dialog">
+      <div class="warning-dialog-top">
+        <span>Content Warning: Defamation Risk Detected</span>
+        <button class="btn btn-outline btn-sm" onclick="closeWarningModal()">✕</button>
+      </div>
+      <div class="warning-dialog-body">
+        <p style="font-weight:600; color:var(--text-primary);">
+          This post contains a potentially defamatory statement against an identifiable person and may harm their reputation.
+        </p>
+        <div class="warning-reason-box" id="warningModalReason">
+          The statement accusing <strong>Mark of stealing ₱30,000</strong> from the capstone project budget imputes a serious offense without verified proof and must be reviewed for accuracy.
+        </div>
+        <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:18px;">
+          You may edit your post now, or submit it for human moderator review before publication.
+        </p>
+        <div style="display:flex; justify-content:flex-end; gap:8px;">
+          <button class="btn btn-outline" onclick="closeWarningModal()">Edit Post</button>
+          <button class="btn btn-primary" onclick="requestModeratorReview()">Request Moderator Review</button>
+          <button class="btn btn-outline" onclick="cancelPostFromModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentScenario = 5;
+    const scenarioOrder = [1, 5, 3];
+
+    const scenarios = {
+      1: {
+        author: "Carlos Mendoza",
+        sub: "BSIT 4th Year • Reported by 1 user • Public Feed",
+        avatar: "CM", bg: "#f0fdf4", col: "#15803d",
+        text: "The university's online enrollment portal is extremely slow. Students are experiencing unnecessary delays, and the IT department should improve its performance so we can finish enrolling on time.",
+        hasAttachments: true,
+        caseId: "Case #RPT-2026-00108",
+        rawId: "RPT-2026-00108",
+        alertPill: `<span class="status-dot"></span>Reviewed: Service Criticism`,
+        alertClass: "status-badge badge-allow",
+        reason: "Complaint about slow enrollment portal performance",
+        target: "University Online Enrollment System (Service)",
+        ident: `<span class="status-badge badge-allow"><span class="status-dot"></span>No individual person accused</span>`,
+        evidence: "2 screenshots showing loading/timeout errors",
+        checks: [true, false, false, false],
+        decTitle: "Post Allowed (Protected Criticism)",
+        decDesc: "This post is allowed on CampusConnect because it expresses legitimate criticism of a campus IT service backed by screenshots and does not defame any identifiable person.",
+        decRationale: "Under Chapter VI (Cyber Libel Law), expressing negative opinions or factual complaints about institutional systems supports accountability and is protected freedom of expression.",
+        bannerBg: "var(--allow-bg)", bannerBorder: "var(--allow-border)", titleCol: "var(--allow-text)"
+      },
+      3: {
+        author: "Ryan Dela Cruz",
+        sub: "BSCS 4th Year • Reported by 5 users • Public Feed",
+        avatar: "RD", bg: "#fef2f2", col: "#b91c1c",
+        text: "Mark stole ₱30,000 from our capstone project budget! He is a thief and used our group funds for his personal expenses. He should be expelled from the university immediately!",
+        hasAttachments: false,
+        warnReason: "The statement accusing <strong>Mark of stealing ₱30,000</strong> from the capstone project budget imputes a crime (theft) against an identifiable student and must be reviewed for accuracy.",
+        caseId: "Case #RPT-2026-00324",
+        rawId: "RPT-2026-00324",
+        alertPill: `<span class="status-dot"></span>Flagged: Defamation Risk`,
+        alertClass: "status-badge badge-remove",
+        reason: "Knowingly false accusation of theft (₱30,000) against a student",
+        target: "Mark (Capstone Student)",
+        ident: `<span class="status-badge badge-remove"><span class="status-dot"></span>Yes — Target is identifiable</span>`,
+        evidence: "None provided (Knowingly false accusation)",
+        checks: [true, true, true, true],
+        decTitle: "Post Restricted After Human Review",
+        decDesc: "After human moderator review, this post has been restricted because it contains a knowingly false accusation of theft against an identifiable student (Mark) and may severely damage his reputation.",
+        decRationale: "Under CampusConnect rules and Chapter VI (Cyber Libel Law), publicly imputing a crime (stealing ₱30,000) to an identifiable student with knowledge of falsity satisfies the elements of defamation (imputation, publication, identifiability, and malice).",
+        bannerBg: "var(--remove-bg)", bannerBorder: "var(--remove-border)", titleCol: "var(--remove-text)"
+      },
+      5: {
+        author: "Jessa Villanueva",
+        sub: "BSIT 3rd Year • Reported by 3 users • Public Feed",
+        avatar: "JV", bg: "#fffbeb", col: "#b45309",
+        text: "I just received an anonymous message claiming that Registrar staff member Mr. Hector Dizon has been manipulating students' final grades. Sharing this here so everyone knows what is circulating!",
+        hasAttachments: false,
+        warnReason: "The statement naming <strong>Mr. Hector Dizon for allegedly manipulating grades</strong> repeats an <strong>unverified anonymous rumor</strong> without supporting proof and requires moderator verification.",
+        caseId: "Case #RPT-2026-00215",
+        rawId: "RPT-2026-00215",
+        alertPill: `<span class="status-dot"></span>Flagged: Unverified Rumor`,
+        alertClass: "status-badge badge-flag",
+        reason: "Republishing an unverified rumor naming a university employee",
+        target: "Mr. Hector Dizon (University Employee)",
+        ident: `<span class="status-badge badge-flag"><span class="status-dot"></span>Yes — Employee is named</span>`,
+        evidence: "Anonymous rumor only (Requires verification)",
+        checks: [true, true, true, true],
+        decTitle: "Post Flagged for Review (Pending Verification)",
+        decDesc: "This post is held for moderator verification because it republishes an anonymous, unverified rumor accusing a named employee of grade manipulation without reliable evidence.",
+        decRationale: "Under Chapter VI (Cyber Libel Law), repeating an unsubstantiated defamatory rumor against a named individual risks reputational harm. Human moderators must verify whether supporting evidence exists before allowing or removing the post.",
+        bannerBg: "var(--flag-bg)", bannerBorder: "var(--flag-border)", titleCol: "var(--flag-text)"
+      }
+    };
+
+    function loadScenario(num) {
+      currentScenario = num;
+      [1, 3, 5].forEach(n => {
+        document.getElementById('scenbtn-' + n).classList.toggle('scen-active', n === num);
+        const otab = document.getElementById('otab-' + n);
+        if (otab) otab.classList.toggle('active-tab', n === num);
+      });
+
+      const s = scenarios[num];
+      document.getElementById('composerInput').value = s.text;
+      document.getElementById('composerAttachments').style.display = s.hasAttachments ? 'grid' : 'none';
+
+      if (s.warnReason) {
+        document.getElementById('warningModalReason').innerHTML = s.warnReason;
+      }
+
+      document.getElementById('modCaseLabel').textContent = s.caseId;
+      document.getElementById('modTableId').textContent = s.rawId;
+      const pill = document.getElementById('modAlertPill');
+      pill.innerHTML = s.alertPill;
+      pill.className = s.alertClass;
+
+      const av = document.getElementById('modAvatar');
+      av.textContent = s.avatar;
+      av.style.background = s.bg;
+      av.style.color = s.col;
+
+      document.getElementById('modAuthor').textContent = s.author;
+      document.getElementById('modSub').textContent = s.sub;
+      document.getElementById('modText').textContent = s.text;
+      document.getElementById('modReason').textContent = s.reason;
+      document.getElementById('modTarget').textContent = s.target;
+      document.getElementById('modIdent').innerHTML = s.ident;
+      document.getElementById('modEvidence').textContent = s.evidence;
+
+      for (let i = 0; i < 4; i++) {
+        const isChecked = s.checks[i];
+        document.getElementById('chk' + (i + 1)).checked = isChecked;
+        document.getElementById('lcard-' + (i + 1)).classList.toggle('checked', isChecked);
+      }
+
+      document.getElementById('decAuthor').textContent = s.author + " • " + s.sub.split('•')[0];
+      document.getElementById('decCaseId').textContent = s.caseId;
+      document.getElementById('decText').textContent = '"' + s.text + '"';
+      document.getElementById('decTitle').textContent = s.decTitle;
+      document.getElementById('decTitle').style.color = s.titleCol;
+      document.getElementById('decDesc').textContent = s.decDesc;
+      document.getElementById('decRationale').textContent = s.decRationale;
+      const banner = document.getElementById('decBanner');
+      banner.style.background = s.bannerBg;
+      banner.style.borderColor = s.bannerBorder;
+    }
+
+    function toggleCheckCard(index, event) {
+      event.preventDefault();
+      const chk = document.getElementById('chk' + index);
+      chk.checked = !chk.checked;
+      document.getElementById('lcard-' + index).classList.toggle('checked', chk.checked);
+    }
+
+    function jumpScreen(screenNum) {
+      for (let i = 1; i <= 5; i++) {
+        document.getElementById('sbtn-' + i).classList.toggle('active', i === screenNum);
+      }
+
+      const warningModal = document.getElementById('warningModal');
+      if (screenNum === 3) {
+        if (currentScenario === 1) loadScenario(3);
+        showBaseView(2);
+        warningModal.classList.add('open');
+      } else {
+        warningModal.classList.remove('open');
+        showBaseView(screenNum);
+      }
+    }
+
+    function showBaseView(viewNum) {
+      [1, 2, 4, 5].forEach(v => {
+        document.getElementById('view-' + v).classList.toggle('active', v === viewNum);
+        const lnav = document.getElementById('lnav-' + v);
+        if (lnav) lnav.classList.toggle('active', v === viewNum);
+      });
+      document.getElementById('centerScroll').scrollTop = 0;
+    }
+
+    function submitComposerPost() {
+      if (currentScenario === 1) {
+        alert("Post Published: Scenario 1 is legitimate service criticism with no defamatory imputation against an individual, so it publishes directly to the Campus Feed.");
+        jumpScreen(1);
+      } else {
+        document.getElementById('sbtn-2').classList.remove('active');
+        document.getElementById('sbtn-3').classList.add('active');
+        document.getElementById('warningModal').classList.add('open');
+      }
+    }
+
+    function closeWarningModal() {
+      document.getElementById('warningModal').classList.remove('open');
+      jumpScreen(2);
+    }
+
+    function requestModeratorReview() {
+      document.getElementById('warningModal').classList.remove('open');
+      jumpScreen(4);
+    }
+
+    function cancelPostFromModal() {
+      document.getElementById('warningModal').classList.remove('open');
+      jumpScreen(1);
+    }
+
+    function reportPost(scenNum) {
+      loadScenario(scenNum);
+      jumpScreen(4);
+    }
+
+    function stepScenario(dir) {
+      let idx = scenarioOrder.indexOf(currentScenario);
+      idx = (idx + dir + scenarioOrder.length) % scenarioOrder.length;
+      loadScenario(scenarioOrder[idx]);
+    }
+
+    function applyDecision(type) {
+      jumpScreen(5);
+    }
+
+    function toggleAttachmentPreview() {
+      const el = document.getElementById('composerAttachments');
+      el.style.display = (el.style.display === 'none') ? 'grid' : 'none';
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('scen')) loadScenario(parseInt(params.get('scen'), 10));
+      if (params.get('screen')) jumpScreen(parseInt(params.get('screen'), 10));
+      if (params.get('clean') === '1') document.querySelector('.presenter-bar').style.display = 'none';
+    });
+  </script>
+</body>
+</html>
