@@ -1,263 +1,961 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CampusConnect – User Flowchart (Scenarios 1, 3, & 5)</title>
+  <title>CampusConnect — Cyber Libel Moderation Pipeline (User Flowchart)</title>
   <style>
+    /* =====================================================================
+       1. THEME TOKENS (Publication Light Theme + High-Contrast Dark Theme)
+       ===================================================================== */
+    :root,
+    [data-theme="light"] {
+      --bg-page: #f1f5f9;
+      --bg-canvas: #f8fafc;
+      --grid-dot: #cbd5e1;
+      --bg-card: #ffffff;
+      --bg-subtle: #f1f5f9;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --border-card: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --line-color: #94a3b8;
+      --line-active: #64748b;
+
+      --brand-bg: #eff6ff;
+      --brand-border: #bfdbfe;
+      --brand-text: #1d4ed8;
+      --brand-icon: #2563eb;
+
+      /* Semantic Status Tokens */
+      --emerald-bg: #f0fdf4;
+      --emerald-border: #bbf7d0;
+      --emerald-accent: #16a34a;
+      --emerald-text: #15803d;
+      --emerald-sub: #166534;
+
+      --amber-bg: #fffbeb;
+      --amber-border: #fde68a;
+      --amber-accent: #d97706;
+      --amber-text: #b45309;
+      --amber-sub: #92400e;
+
+      --crimson-bg: #fef2f2;
+      --crimson-border: #fecaca;
+      --crimson-accent: #dc2626;
+      --crimson-text: #b91c1c;
+      --crimson-sub: #991b1b;
+
+      --shadow-canvas: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+      --shadow-node: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+    }
+
+    [data-theme="dark"] {
+      --bg-page: #06090f;
+      --bg-canvas: #0b0f17;
+      --grid-dot: #1e293b;
+      --bg-card: #111827;
+      --bg-subtle: #1e293b;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-card: #1f2937;
+      --border-strong: #374151;
+      --line-color: #475569;
+      --line-active: #64748b;
+
+      --brand-bg: rgba(30, 58, 138, 0.35);
+      --brand-border: #1e40af;
+      --brand-text: #93c5fd;
+      --brand-icon: #60a5fa;
+
+      --emerald-bg: rgba(6, 78, 59, 0.35);
+      --emerald-border: rgba(16, 185, 129, 0.4);
+      --emerald-accent: #10b981;
+      --emerald-text: #6ee7b7;
+      --emerald-sub: #a7f3d0;
+
+      --amber-bg: rgba(120, 53, 15, 0.35);
+      --amber-border: rgba(245, 158, 11, 0.4);
+      --amber-accent: #f59e0b;
+      --amber-text: #fcd34d;
+      --amber-sub: #fde68a;
+
+      --crimson-bg: rgba(127, 29, 29, 0.35);
+      --crimson-border: rgba(239, 68, 68, 0.4);
+      --crimson-accent: #ef4444;
+      --crimson-text: #fca5a5;
+      --crimson-sub: #fecaca;
+
+      --shadow-canvas: 0 20px 50px rgba(0, 0, 0, 0.6);
+      --shadow-node: 0 2px 6px rgba(0, 0, 0, 0.35);
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
-    }
-    body {
-      background: #090d16;
-      color: #f8fafc;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 32px 20px;
-    }
-    .canvas {
-      max-width: 1060px;
-      width: 100%;
-      background: #0d1322;
-      border: 1px solid #1e293b;
-      border-radius: 20px;
-      padding: 36px 32px 42px;
-      text-align: center;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
-    }
-    h1 {
-      font-size: 26px;
-      font-weight: 800;
-      margin-bottom: 26px;
-      letter-spacing: -0.3px;
-    }
-    .pill {
-      width: 440px;
-      max-width: 100%;
-      margin: 0 auto;
-      background: #172033;
-      border: 1.5px solid #334155;
-      border-radius: 999px;
-      padding: 13px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
-      font-size: 16px;
-      font-weight: 700;
-    }
-    .pill-icon {
-      font-size: 18px;
-      padding-right: 12px;
-      border-right: 1px solid #475569;
-    }
-    .arrow {
-      font-size: 20px;
-      color: #94a3b8;
-      margin: 6px 0;
-      line-height: 1;
-    }
-    /* 3-Branch Connector */
-    .branch-lines {
-      width: 68%;
-      margin: 6px auto 0;
-      border-top: 2px solid #64748b;
-      display: flex;
-      justify-content: space-between;
-      position: relative;
-      height: 18px;
-    }
-    .branch-lines::before {
-      content: "";
-      position: absolute;
-      top: -12px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 2px;
-      height: 12px;
-      background: #64748b;
-    }
-    .branch-tick {
-      width: 2px;
-      height: 18px;
-      background: #64748b;
     }
 
-    .branches {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      margin-top: 4px;
-      align-items: start;
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 24px 36px;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
-    .col {
+
+    /* =====================================================================
+       2. TOP UTILITY & EXPORT TOOLBAR (Hidden in Printable Mode)
+       ===================================================================== */
+    .utility-bar {
+      max-width: 1120px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding: 8px 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      box-shadow: var(--shadow-node);
+      font-size: 12px;
+    }
+    .utility-bar.hidden {
+      display: none;
+    }
+    .util-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .util-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--brand-icon);
+    }
+    .util-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .util-btn {
+      background: var(--bg-subtle);
+      color: var(--text-secondary);
+      border: 1px solid var(--border-strong);
+      border-radius: 6px;
+      padding: 5px 11px;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.12s ease;
+    }
+    .util-btn:hover {
+      background: var(--brand-bg);
+      color: var(--brand-text);
+      border-color: var(--brand-border);
+    }
+
+    /* =====================================================================
+       3. DIAGRAM CANVAS CONTAINER
+       ===================================================================== */
+    .diagram-canvas {
+      max-width: 1120px;
+      width: 100%;
+      background-color: var(--bg-canvas);
+      background-image: radial-gradient(var(--grid-dot) 1px, transparent 1px);
+      background-size: 18px 18px;
+      border: 1px solid var(--border-card);
+      border-radius: 16px;
+      padding: 28px 32px 34px;
+      box-shadow: var(--shadow-canvas);
+      position: relative;
+    }
+
+    /* Diagram Top Header Block */
+    .canvas-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding-bottom: 18px;
+      margin-bottom: 22px;
+      border-bottom: 1px solid var(--border-card);
+      background: var(--bg-canvas);
+    }
+    .header-title-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .header-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 9px;
+      background: var(--brand-bg);
+      border: 1px solid var(--brand-border);
+      color: var(--brand-icon);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .canvas-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+    }
+    .canvas-subtitle {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .header-badges {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .meta-pill {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      color: var(--text-secondary);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    /* =====================================================================
+       4. STANDARDIZED NODE CARDS & SVG CONNECTORS
+       ===================================================================== */
+    .flow-stack {
       display: flex;
       flex-direction: column;
       align-items: center;
     }
-    .scen-card {
-      width: 100%;
-      border-radius: 16px;
-      padding: 16px 16px;
+
+    /* Base Node Card */
+    .node-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      padding: 11px 16px;
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
+      box-shadow: var(--shadow-node);
+      width: 340px;
+      max-width: 100%;
+      position: relative;
       text-align: left;
     }
-    .scen-icon {
-      font-size: 22px;
-      padding-right: 12px;
-      border-right: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    .scen-title {
-      font-size: 16px;
-      font-weight: 800;
-      margin-bottom: 3px;
-    }
-    .scen-sub {
-      font-size: 12.5px;
-      opacity: 0.88;
-      line-height: 1.35;
-    }
-
-    .card-green {
-      background: rgba(6, 78, 59, 0.55);
-      border: 1.5px solid #10b981;
-      color: #ecfdf5;
-    }
-    .card-yellow {
-      background: rgba(120, 53, 15, 0.5);
-      border: 1.5px solid #f59e0b;
-      color: #fffbeb;
-    }
-    .card-red {
-      background: rgba(127, 29, 29, 0.5);
-      border: 1.5px solid #ef4444;
-      color: #fef2f2;
-    }
-
-    .step-pill {
-      width: 100%;
-      background: #172033;
-      border: 1.5px solid #334155;
-      border-radius: 999px;
-      padding: 11px 18px;
+    .node-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-card);
+      color: var(--text-secondary);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      font-size: 14.5px;
+      flex-shrink: 0;
+    }
+    .node- icon svg,
+    .node-icon svg {
+      width: 17px;
+      height: 17px;
+    }
+    .node-content {
+      flex: 1;
+      min-width: 0;
+    }
+    .node-step-tag {
+      font-size: 10px;
       font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--brand-text);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      display: block;
+      margin-bottom: 1px;
+    }
+    .node-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.25;
+    }
+    .node-desc {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.35;
+      margin-top: 2px;
+    }
+
+    /* Decision / Evaluation Node */
+    .decision-node {
+      width: 390px;
+      background: var(--brand-bg);
+      border: 1.5px solid var(--brand-border);
+    }
+    .decision-node .node-icon {
+      background: var(--bg-card);
+      border-color: var(--brand-border);
+      color: var(--brand-icon);
+    }
+
+    /* Vertical SVG Connector Segment */
+    .v-connector {
+      display: block;
+      width: 24px;
+      height: 26px;
+      flex-shrink: 0;
+    }
+    .v-connector path,
+    .v-connector line {
+      stroke: var(--line-color);
+      stroke-width: 1.75;
+      fill: none;
+    }
+    .v-connector polygon {
+      fill: var(--line-color);
+    }
+
+    /* 3-Way Orthogonal Manifold Split SVG */
+    .manifold-wrap {
+      width: 100%;
+      max-width: 1040px;
+      height: 38px;
+      display: block;
+      margin: 0 auto;
+    }
+    .manifold-wrap path,
+    .manifold-wrap line {
+      stroke: var(--line-color);
+      stroke-width: 1.75;
+      fill: none;
+    }
+    .manifold-wrap circle {
+      fill: var(--bg-card);
+      stroke: var(--line-active);
+      stroke-width: 2;
+    }
+    .manifold-wrap polygon {
+      fill: var(--line-color);
+    }
+
+    /* =====================================================================
+       5. THREE-COLUMN SCENARIO BRANCHES
+       ===================================================================== */
+    .branches-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      width: 100%;
+      max-width: 1040px;
+      margin: 0 auto;
+      align-items: stretch;
+    }
+    .branch-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .branch-col .node-card {
+      width: 100%;
+    }
+
+    /* Scenario Header Cards (Top of Each Branch) */
+    .scenario-card {
+      border-top-width: 3px;
+    }
+    .scenario-allow {
+      border-top-color: var(--emerald-accent);
+    }
+    .scenario-allow .node-step-tag { color: var(--emerald-text); }
+    .scenario-allow .node-icon {
+      background: var(--emerald-bg);
+      border-color: var(--emerald-border);
+      color: var(--emerald-text);
+    }
+
+    .scenario-flag {
+      border-top-color: var(--amber-accent);
+    }
+    .scenario-flag .node-step-tag { color: var(--amber-text); }
+    .scenario-flag .node-icon {
+      background: var(--amber-bg);
+      border-color: var(--amber-border);
+      color: var(--amber-text);
+    }
+
+    .scenario-remove {
+      border-top-color: var(--crimson-accent);
+    }
+    .scenario-remove .node-step-tag { color: var(--crimson-text); }
+    .scenario-remove .node-icon {
+      background: var(--crimson-bg);
+      border-color: var(--crimson-border);
+      color: var(--crimson-text);
+    }
+
+    /* Terminal Outcome Status Cards (Bottom of Each Branch) */
+    .outcome-card {
+      border-radius: 10px;
+      padding: 12px 15px;
+      width: 100%;
+      display: flex;
+      align-items: flex-start;
+      gap: 11px;
+      box-shadow: var(--shadow-node);
+    }
+    .outcome-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .outcome-icon svg {
+      width: 16px;
+      height: 16px;
+    }
+    .outcome-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .outcome-title {
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+    .outcome-desc {
+      font-size: 11.5px;
+      line-height: 1.35;
+      margin-top: 2px;
+    }
+
+    /* Emerald Outcome */
+    .outcome-emerald {
+      background: var(--emerald-bg);
+      border: 1.5px solid var(--emerald-border);
+      color: var(--emerald-text);
+    }
+    .outcome-emerald .outcome-icon {
+      background: var(--bg-card);
+      border: 1px solid var(--emerald-border);
+      color: var(--emerald-text);
+    }
+    .outcome-emerald .outcome-desc { color: var(--emerald-sub); }
+
+    /* Amber Outcome */
+    .outcome-amber {
+      background: var(--amber-bg);
+      border: 1.5px solid var(--amber-border);
+      color: var(--amber-text);
+    }
+    .outcome-amber .outcome-icon {
+      background: var(--bg-card);
+      border: 1px solid var(--amber-border);
+      color: var(--amber-text);
+    }
+    .outcome-amber .outcome-desc { color: var(--amber-sub); }
+
+    /* Crimson Outcome */
+    .outcome-crimson {
+      background: var(--crimson-bg);
+      border: 1.5px solid var(--crimson-border);
+      color: var(--crimson-text);
+    }
+    .outcome-crimson .outcome-icon {
+      background: var(--bg-card);
+      border: 1px solid var(--crimson-border);
+      color: var(--crimson-text);
+    }
+    .outcome-crimson .outcome-desc { color: var(--crimson-sub); }
+
+    /* Legend Footer Bar */
+    .canvas-footer {
+      margin-top: 24px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border-card);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      background: var(--bg-canvas);
+    }
+    .legend-group {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+    }
+    .legend-swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+    }
+
+    @media print {
+      body {
+        padding: 0;
+        background: #ffffff;
+      }
+      .utility-bar {
+        display: none !important;
+      }
+      .diagram-canvas {
+        box-shadow: none;
+        border: 1px solid #cbd5e1;
+      }
+    }
+
+    @media (max-width: 960px) {
+      .manifold-wrap {
+        display: none;
+      }
+      .branches-grid {
+        grid-template-columns: 1fr;
+        margin-top: 16px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <div class="canvas">
-    <h1>CampusConnect User Flowchart</h1>
-
-    <div class="pill">
-      <span class="pill-icon">📰</span>
-      <span>Screen 1: Social Media Feed</span>
+  <!-- ===================================================================
+       TOP UTILITY & DOCUMENTATION EXPORT TOOLBAR
+       =================================================================== -->
+  <div class="utility-bar" id="utilityBar">
+    <div class="util-left">
+      <span class="util-dot"></span>
+      <span>System Architecture &amp; Moderation Flowchart — Ready for Word Report &amp; Figma</span>
     </div>
-    <div class="arrow">↓</div>
-
-    <div class="pill">
-      <span class="pill-icon">✏️</span>
-      <span>Screen 2: Create Post</span>
-    </div>
-    <div class="arrow">↓</div>
-
-    <div class="pill">
-      <span class="pill-icon">🔍</span>
-      <span>Analyze the Selected Scenario</span>
-    </div>
-
-    <!-- 3-Way Split Connector -->
-    <div class="branch-lines">
-      <div class="branch-tick"></div>
-      <div class="branch-tick"></div>
-      <div class="branch-tick"></div>
-    </div>
-
-    <div class="branches">
-
-      <!-- Column 1: Scenario 1 -->
-      <div class="col">
-        <div class="scen-card card-green">
-          <div class="scen-icon">✔</div>
-          <div>
-            <div class="scen-title">Scenario 1</div>
-            <div class="scen-sub">Legitimate service criticism (Enrollment System)</div>
-          </div>
-        </div>
-        <div class="arrow">↓</div>
-        <div class="step-pill" style="border-color:#10b981;">
-          <span>🚀</span>
-          <span>Allow & Publish Post</span>
-        </div>
-      </div>
-
-      <!-- Column 2: Scenario 5 -->
-      <div class="col">
-        <div class="scen-card card-yellow">
-          <div class="scen-icon">⚠️</div>
-          <div>
-            <div class="scen-title">Scenario 5</div>
-            <div class="scen-sub">Unverified rumor naming an employee</div>
-          </div>
-        </div>
-        <div class="arrow">↓</div>
-        <div class="step-pill">
-          <span>🛡️</span>
-          <span>Screen 3: Content Warning</span>
-        </div>
-        <div class="arrow">↓</div>
-        <div class="step-pill">
-          <span>👤</span>
-          <span>Screen 4: Human Review</span>
-        </div>
-        <div class="arrow">↓</div>
-        <div class="step-pill" style="border-color:#f59e0b;">
-          <span>🚩</span>
-          <span>Flag for Verification & Appeal</span>
-        </div>
-      </div>
-
-      <!-- Column 3: Scenario 3 -->
-      <div class="col">
-        <div class="scen-card card-red">
-          <div class="scen-icon">🚫</div>
-          <div>
-            <div class="scen-title">Scenario 3</div>
-            <div class="scen-sub">Knowingly false ₱30k theft accusation</div>
-          </div>
-        </div>
-        <div class="arrow">↓</div>
-        <div class="step-pill">
-          <span>🛡️</span>
-          <span>Screen 3: Content Warning</span>
-        </div>
-        <div class="arrow">↓</div>
-        <div class="step-pill">
-          <span>👤</span>
-          <span>Screen 4: Human Review</span>
-        </div>
-        <div class="arrow">↓</div>
-        <div class="step-pill" style="border-color:#ef4444;">
-          <span>⚖️</span>
-          <span>Screen 5: Restrict & Appeal</span>
-        </div>
-      </div>
-
+    <div class="util-actions">
+      <button class="util-btn" onclick="toggleTheme()" id="themeBtn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <span>Switch to Dark Theme</span>
+      </button>
+      <button class="util-btn" onclick="window.print()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        <span>Print / Save PDF</span>
+      </button>
+      <button class="util-btn" onclick="document.getElementById('utilityBar').classList.add('hidden')" title="Hide this toolbar for clean screenshot capture">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+        <span>Clean Screenshot View</span>
+      </button>
     </div>
   </div>
 
+  <!-- ===================================================================
+       MAIN SYSTEM FLOWCHART CANVAS
+       =================================================================== -->
+  <div class="diagram-canvas">
+
+    <!-- Diagram Header -->
+    <header class="canvas-header">
+      <div class="header-title-group">
+        <div class="header-logo">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="canvas-title">CampusConnect User Flowchart</h1>
+          <p class="canvas-subtitle">Cyber Libel Moderation Pipeline &amp; Scenario-Based Decision Architecture</p>
+        </div>
+      </div>
+
+      <div class="header-badges">
+        <span class="meta-pill">Chapter VI: Cyber Libel Law</span>
+        <span class="meta-pill">BSIT 4C • Group 4</span>
+      </div>
+    </header>
+
+    <!-- ===============================================================
+         TOP STAGE: COMMON SUBMISSION & ANALYSIS PATH
+         =============================================================== -->
+    <div class="flow-stack">
+
+      <!-- Node 1: Screen 1 -->
+      <div class="node-card">
+        <div class="node-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="3" y1="9" x2="21" y2="9"></line>
+            <line x1="9" y1="21" x2="9" y2="9"></line>
+          </svg>
+        </div>
+        <div class="node-content">
+          <span class="node-step-tag">Screen 01 • Entry Point</span>
+          <div class="node-title">Social Media Feed</div>
+          <div class="node-desc">User browses campus posts, clicks Create Post, or reports content</div>
+        </div>
+      </div>
+
+      <!-- SVG Arrow 1 -> 2 -->
+      <svg class="v-connector" viewBox="0 0 24 26">
+        <line x1="12" y1="0" x2="12" y2="20" />
+        <polygon points="12,25 8,18 16,18" />
+      </svg>
+
+      <!-- Node 2: Screen 2 -->
+      <div class="node-card">
+        <div class="node-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+        </div>
+        <div class="node-content">
+          <span class="node-step-tag">Screen 02 • Submission</span>
+          <div class="node-title">Create a Post</div>
+          <div class="node-desc">User composes post content, attaches media, and clicks Publish</div>
+        </div>
+      </div>
+
+      <!-- SVG Arrow 2 -> Decision -->
+      <svg class="v-connector" viewBox="0 0 24 26">
+        <line x1="12" y1="0" x2="12" y2="20" />
+        <polygon points="12,25 8,18 16,18" />
+      </svg>
+
+      <!-- Node 3: Content Moderation Analysis (Decision Gate) -->
+      <div class="node-card decision-node">
+        <div class="node-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </div>
+        <div class="node-content">
+          <span class="node-step-tag">Decision Gate • Chapter VI Pre-Check</span>
+          <div class="node-title">Content Moderation Analysis</div>
+          <div class="node-desc">Evaluates defamatory imputation, identifiability, &amp; verification</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ===============================================================
+         ORTHOGONAL 3-WAY SVG MANIFOLD CONNECTOR
+         =============================================================== -->
+    <svg class="manifold-wrap" viewBox="0 0 1040 38" preserveAspectRatio="none">
+      <!-- Center vertical drop from Decision Node -->
+      <line x1="520" y1="0" x2="520" y2="16" />
+      <!-- Horizontal distribution bus -->
+      <path d="M 165 32 L 165 22 Q 165 16 171 16 L 869 16 Q 875 16 875 22 L 875 32" />
+      <!-- Center branch drop -->
+      <line x1="520" y1="16" x2="520" y2="32" />
+      <!-- Junction node dot -->
+      <circle cx="520" cy="16" r="3.5" />
+      <!-- 3 Branch Arrowheads -->
+      <polygon points="165,37 161,30 169,30" />
+      <polygon points="520,37 516,30 524,30" />
+      <polygon points="875,37 871,30 879,30" />
+    </svg>
+
+    <!-- ===============================================================
+         THREE SCENARIO BRANCHES (SCENARIOS 14, 5, & 11)
+         =============================================================== -->
+    <div class="branches-grid">
+
+      <!-- -------------------------------------------------------------
+           BRANCH 1: SCENARIO 14 (EVIDENCE-BASED TECH CRITICISM -> ALLOW)
+           ------------------------------------------------------------- -->
+      <div class="branch-col">
+        <!-- Scenario 14 Card -->
+        <div class="node-card scenario-card scenario-allow">
+          <div class="node-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </div>
+          <div class="node-content">
+            <span class="node-step-tag">Scenario 14 • Evidence-Based Criticism</span>
+            <div class="node-title">Tech Blog Criticizing Software Quality</div>
+            <div class="node-desc">Negative review with test results &amp; security fixes; not defamatory</div>
+          </div>
+        </div>
+
+        <svg class="v-connector" viewBox="0 0 24 26">
+          <line x1="12" y1="0" x2="12" y2="20" />
+          <polygon points="12,25 8,18 16,18" />
+        </svg>
+
+        <!-- Action Step: Immediate Publish -->
+        <div class="node-card">
+          <div class="node-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"></line>
+              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+          </div>
+          <div class="node-content">
+            <span class="node-step-tag">Automated Routing</span>
+            <div class="node-title">Immediate Publication</div>
+            <div class="node-desc">Bypasses warning modal; published directly to Screen 1 Feed</div>
+          </div>
+        </div>
+
+        <svg class="v-connector" viewBox="0 0 24 26">
+          <line x1="12" y1="0" x2="12" y2="20" />
+          <polygon points="12,25 8,18 16,18" />
+        </svg>
+
+        <!-- Outcome 1: Allowed Post -->
+        <div class="outcome-card outcome-emerald">
+          <div class="outcome-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <div>
+            <span class="outcome-label">Outcome 01 • Protected Speech</span>
+            <div class="outcome-title">Allowed Post</div>
+            <div class="outcome-desc">Live on Campus Feed; upholds freedom of expression &amp; fair comment</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- -------------------------------------------------------------
+           BRANCH 2: SCENARIO 5 (UNVERIFIED RUMOR -> FLAG FOR REVIEW)
+           ------------------------------------------------------------- -->
+      <div class="branch-col">
+        <!-- Scenario 5 Card -->
+        <div class="node-card scenario-card scenario-flag">
+          <div class="node-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+          </div>
+          <div class="node-content">
+            <span class="node-step-tag">Scenario 05 • Unverified Allegation</span>
+            <div class="node-title">Sharing an Unverified Rumor</div>
+            <div class="node-desc">Anonymous grade manipulation claim naming a staff member without proof</div>
+          </div>
+        </div>
+
+        <svg class="v-connector" viewBox="0 0 24 26">
+          <line x1="12" y1="0" x2="12" y2="20" />
+          <polygon points="12,25 8,18 16,18" />
+        </svg>
+
+        <!-- Screen 3: Content Warning -->
+        <div class="node-card">
+          <div class="node-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </div>
+          <div class="node-content">
+            <span class="node-step-tag">Screen 03 • Pre-Publication Alert</span>
+            <div class="node-title">Content Warning Modal</div>
+            <div class="node-desc">Alerts poster of unverified claim risk; offers Edit, Cancel, or Review</div>
+          </div>
+        </div>
+
+        <svg class="v-connector" viewBox="0 0 24 26">
+          <line x1="12" y1="0" x2="12" y2="20" />
+          <polygon points="12,25 8,18 16,18" />
+        </svg>
+
+        <!-- Screen 4: Human Review -->
+        <div class="node-card">
+          <div class="node-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="8.5" cy="7" r="4"></circle>
+              <polyline points="17 11 19 13 23 9"></polyline>
+            </svg>
+          </div>
+          <div class="node-content">
+            <span class="node-step-tag">Screen 04 • Moderation Queue</span>
+            <div class="node-title">Human Moderator Review</div>
+            <div class="node-desc">Checks if corroborating evidence or official investigation exists</div>
+          </div>
+        </div>
+
+        <svg class="v-connector" viewBox="0 0 24 26">
+          <line x1="12" y1="0" x2="12" y2="20" />
+          <polygon points="12,25 8,18 16,18" />
+        </svg>
+
+        <!-- Outcome 2: Flag for Review & Verification -->
+        <div class="outcome-card outcome-amber">
+          <div class="outcome-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+              <line x1="4" y1="22" x2="4" y2="15"></line>
+            </svg>
+          </div>
+          <div>
+            <span class="outcome-label">Outcome 02 • Screen 05 Notice</span>
+            <div class="outcome-title">Flag for Review &amp; Verification</div>
+            <div class="outcome-desc">Held pending factual proof; user may submit evidence via Appeal</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- -------------------------------------------------------------
+           BRANCH 3: SCENARIO 11 (FALSE REPOST CAPTION -> RESTRICT & APPEAL)
+           ------------------------------------------------------------- -->
+      <div class="branch-col">
+        <!-- Scenario 11 Card -->
+        <div class="node-card scenario-card scenario-remove">
+          <div class="node-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="15" y1="9" x2="9" y2="15"></line>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+          </div>
+          <div class="node-content">
+            <span class="node-step-tag">Scenario 11 • Knowingly False Addition</span>
+            <div class="node-title">Reposting with Added Accusation</div>
+            <div class="node-desc">User shares a post &amp; authors a new embezzlement claim known to be false</div>
+          </div>
+        </div>
+
+        <svg class="v-connector" viewBox="0 0 24 26">
+          <line x1="12" y1="0" x2="12" y2="20" />
+          <polygon points="12,25 8,18 16,18" />
+        </svg>
+
+        <!-- Screen 3: Content Warning -->
+        <div class="node-card">
+          <div class="node-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </div>
+          <div class="node-content">
+            <span class="node-step-tag">Screen 03 • Pre-Publication Alert</span>
+            <div class="node-title">Content Warning Modal</div>
+            <div class="node-desc">Flags newly authored crime imputation against identifiable employee</div>
+          </div>
+        </div>
+
+        <svg class="v-connector" viewBox="0 0 24 26">
+          <line x1="12" y1="0" x2="12" y2="20" />
+          <polygon points="12,25 8,18 16,18" />
+        </svg>
+
+        <!-- Screen 4: Human Review -->
+        <div class="node-card">
+          <div class="node-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+          </div>
+          <div class="node-content">
+            <span class="node-step-tag">Screen 04 • Moderation Queue</span>
+            <div class="node-title">Human Moderator Review</div>
+            <div class="node-desc">Separates sharing from new false statement; confirms Cyber Libel elements</div>
+          </div>
+        </div>
+
+        <svg class="v-connector" viewBox="0 0 24 26">
+          <line x1="12" y1="0" x2="12" y2="20" />
+          <polygon points="12,25 8,18 16,18" />
+        </svg>
+
+        <!-- Outcome 3: Screen 5 Post Restricted & Appeal -->
+        <div class="outcome-card outcome-crimson">
+          <div class="outcome-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
+            </svg>
+          </div>
+          <div>
+            <span class="outcome-label">Outcome 03 • Screen 05 Resolution</span>
+            <div class="outcome-title">Post Restricted / Removed &amp; Appeal</div>
+            <div class="outcome-desc">Removed from public feed with Chapter VI rationale &amp; Appeal option</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Diagram Legend Footer -->
+    <footer class="canvas-footer">
+      <div class="legend-group">
+        <div class="legend-item">
+          <span class="legend-swatch" style="background:var(--emerald-accent);"></span>
+          <span>Allow Post (Protected Expression)</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-swatch" style="background:var(--amber-accent);"></span>
+          <span>Flag for Review (Pending Verification)</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-swatch" style="background:var(--crimson-accent);"></span>
+          <span>Remove / Restrict (Actionable Cyber Libel)</span>
+        </div>
+      </div>
+      <div>
+        <span>Interactive Prototype Architecture • Screens 1–5</span>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    function toggleTheme() {
+      const root = document.documentElement;
+      const current = root.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      const btnSpan = document.querySelector('#themeBtn span');
+      btnSpan.textContent = next === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme';
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+      if (params.get('clean') === '1') {
+        document.getElementById('utilityBar').classList.add('hidden');
+      }
+    });
+  </script>
 </body>
 </html>
-

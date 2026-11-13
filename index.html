@@ -1188,9 +1188,9 @@
     <div class="presenter-group">
       <span class="presenter-label">Load Scenario</span>
       <div class="pill-switch">
-        <button class="p-btn" id="scenbtn-1" onclick="loadScenario(1)">Scenario 1: Enrollment</button>
-        <button class="p-btn" id="scenbtn-3" onclick="loadScenario(3)">Scenario 3: Theft Claim</button>
-        <button class="p-btn scen-active" id="scenbtn-5" onclick="loadScenario(5)">Scenario 5: Grade Rumor</button>
+        <button class="p-btn" id="scenbtn-14" onclick="loadScenario(14)">Scenario 14: Tech Review</button>
+        <button class="p-btn scen-active" id="scenbtn-5" onclick="loadScenario(5)">Scenario 5: Unverified Rumor</button>
+        <button class="p-btn" id="scenbtn-11" onclick="loadScenario(11)">Scenario 11: False Repost</button>
       </div>
     </div>
   </div>
@@ -1321,7 +1321,7 @@
           </div>
         </div>
 
-        <!-- Post 1: Scenario 1 (Allowed) -->
+        <!-- Post 1: Scenario 14 (Allowed - Evidence-based tech criticism) -->
         <article class="card">
           <div class="post-header">
             <div class="post-author-group">
@@ -1329,7 +1329,7 @@
               <div>
                 <div class="post-author-name">Carlos Mendoza</div>
                 <div class="post-author-meta">
-                  <span>BSIT 4th Year</span>
+                  <span>BSIT 4th Year • Tech Blog</span>
                   <span>•</span>
                   <span>2 hours ago</span>
                 </div>
@@ -1341,28 +1341,28 @@
           </div>
 
           <p class="post-body-text">
-            The university's online enrollment portal is extremely slow. Students are experiencing unnecessary delays, and the IT department should improve its performance so we can finish enrolling on time.
+            <strong>Tech Review: University Portal v2.0 Quality &amp; Security</strong> — Our newly deployed campus app has severe latency spikes and exposed API endpoints. Attaching our performance benchmark results, screenshots, and recommendations for the developer team to patch.
           </p>
 
           <div class="attachment-grid">
             <div class="mock-window">
               <div class="mock-window-bar">
                 <span class="win-dots"><i></i><i></i><i></i></span>
-                <span>enrollment.university.edu.ph</span>
+                <span>perf_benchmark_results.png</span>
               </div>
               <div class="mock-window-body">
-                <strong style="display:block; color:var(--text-primary); margin-bottom:2px;">Enrollment Portal</strong>
-                <span>Loading student subjects... Request timed out.</span>
+                <strong style="display:block; color:var(--text-primary); margin-bottom:2px;">Performance Test Results</strong>
+                <span>Avg Load: 8.4s • 504 Timeouts under 200 concurrent users.</span>
               </div>
             </div>
-            <div class="mock-window" style="border-color:var(--remove-border); background:var(--remove-bg);">
-              <div class="mock-window-bar" style="background:#fee2e2; border-color:var(--remove-border); color:var(--remove-text);">
+            <div class="mock-window" style="border-color:var(--flag-border); background:var(--flag-bg);">
+              <div class="mock-window-bar" style="background:#fef3c7; border-color:var(--flag-border); color:var(--flag-text);">
                 <span class="win-dots"><i></i><i></i><i></i></span>
-                <span>504 Gateway Timeout</span>
+                <span>security_audit_headers.png</span>
               </div>
-              <div class="mock-window-body" style="color:var(--remove-text);">
-                <strong style="display:block; margin-bottom:2px;">Connection Error</strong>
-                <span>The enrollment server is currently overloaded.</span>
+              <div class="mock-window-body" style="color:var(--flag-text);">
+                <strong style="display:block; margin-bottom:2px;">Security Recommendations</strong>
+                <span>Missing CSP headers &amp; unthrottled login endpoint.</span>
               </div>
             </div>
           </div>
@@ -1373,12 +1373,12 @@
               <button class="feed-action-btn" onclick="this.textContent='Liked (287)'">Like</button>
               <button class="feed-action-btn">Comment</button>
               <button class="feed-action-btn">Share</button>
-              <button class="feed-action-btn report" onclick="reportPost(1)">Report</button>
+              <button class="feed-action-btn report" onclick="reportPost(14)">Report</button>
             </div>
           </div>
         </article>
 
-        <!-- Post 2: Scenario 5 (Flagged for Review) -->
+        <!-- Post 2: Scenario 5 (Flagged for Review - Questionable unverified rumor) -->
         <article class="card">
           <div class="post-header">
             <div class="post-author-group">
@@ -1412,7 +1412,7 @@
           </div>
         </article>
 
-        <!-- Post 3: Scenario 3 (Restricted Post) -->
+        <!-- Post 3: Scenario 11 (Restricted Post - Reposting with newly authored knowingly false accusation) -->
         <article class="card">
           <div class="post-header">
             <div class="post-author-group">
@@ -1420,7 +1420,7 @@
               <div>
                 <div class="post-author-name">Ryan Dela Cruz</div>
                 <div class="post-author-meta">
-                  <span>BSCS 4th Year</span>
+                  <span>BSCS 4th Year • Shared Post</span>
                   <span>•</span>
                   <span>6 hours ago</span>
                 </div>
@@ -1432,7 +1432,10 @@
           </div>
 
           <p class="post-body-text">
-            Mark stole ₱30,000 from our capstone project budget! He is a thief and used our group funds for his personal expenses. He should be expelled from the university immediately!
+            <strong>[Added Caption]</strong> Not only did Mr. Ramon Santos commit misconduct—I know for a fact he also embezzled ₱50,000 from the scholarship fund! Everyone should share this!<br/>
+            <span style="display:block; margin-top:8px; padding:8px 12px; background:var(--bg-app); border-left:3px solid var(--border-strong); border-radius:4px; font-size:12.5px; color:var(--text-muted);">
+              <em>Shared Post:</em> "Controversial campus thread discussing alleged misconduct by a university employee."
+            </span>
           </p>
 
           <div class="post-footer-bar">
@@ -1441,7 +1444,7 @@
               <button class="feed-action-btn" onclick="this.textContent='Liked (411)'">Like</button>
               <button class="feed-action-btn">Comment</button>
               <button class="feed-action-btn">Share</button>
-              <button class="feed-action-btn report" onclick="reportPost(3)">Report</button>
+              <button class="feed-action-btn report" onclick="reportPost(11)">Report</button>
             </div>
           </div>
         </article>
@@ -1470,15 +1473,15 @@
 
           <textarea class="composer-textarea" id="composerInput" placeholder="Write your post here...">Mark stole ₱30,000 from our capstone project budget! He is a thief and used our group funds for his personal expenses. He should be expelled from the university immediately!</textarea>
 
-          <!-- Attachment Preview (Scenario 1) -->
+          <!-- Attachment Preview (Scenario 14) -->
           <div class="attachment-grid" id="composerAttachments" style="display:none;">
             <div class="mock-window">
-              <div class="mock-window-bar">enrollment_loading.png</div>
-              <div class="mock-window-body">Enrollment Portal Timeout Screenshot</div>
+              <div class="mock-window-bar">perf_benchmark_results.png</div>
+              <div class="mock-window-body">Software Performance &amp; Latency Test Results</div>
             </div>
-            <div class="mock-window" style="border-color:var(--remove-border); background:var(--remove-bg);">
-              <div class="mock-window-bar" style="background:#fee2e2; color:var(--remove-text);">gateway_error_504.png</div>
-              <div class="mock-window-body" style="color:var(--remove-text);">504 Server Timeout Screenshot</div>
+            <div class="mock-window" style="border-color:var(--flag-border); background:var(--flag-bg);">
+              <div class="mock-window-bar" style="background:#fef3c7; color:var(--flag-text);">security_audit_headers.png</div>
+              <div class="mock-window-body" style="color:var(--flag-text);">Security Weakness &amp; Fix Recommendations</div>
             </div>
           </div>
 
@@ -1516,12 +1519,12 @@
 
           <!-- 3 Unified Analytic Status Tabs -->
           <div class="outcome-tabs-grid">
-            <button class="outcome-tab tab-allow" id="otab-1" onclick="loadScenario(1)">
+            <button class="outcome-tab tab-allow" id="otab-14" onclick="loadScenario(14)">
               <div class="outcome-tab-top">
                 <span class="outcome-tab-label">Allow Post</span>
                 <span class="outcome-tab-count">1</span>
               </div>
-              <div class="outcome-tab-desc">Lawful system criticism</div>
+              <div class="outcome-tab-desc">Evidence-based tech review</div>
             </button>
 
             <button class="outcome-tab tab-flag active-tab" id="otab-5" onclick="loadScenario(5)">
@@ -1529,15 +1532,15 @@
                 <span class="outcome-tab-label">Flag for Review</span>
                 <span class="outcome-tab-count">1</span>
               </div>
-              <div class="outcome-tab-desc">Unverified rumor pending proof</div>
+              <div class="outcome-tab-desc">Questionable rumor pending proof</div>
             </button>
 
-            <button class="outcome-tab tab-remove" id="otab-3" onclick="loadScenario(3)">
+            <button class="outcome-tab tab-remove" id="otab-11" onclick="loadScenario(11)">
               <div class="outcome-tab-top">
                 <span class="outcome-tab-label">Remove / Restrict</span>
                 <span class="outcome-tab-count">1</span>
               </div>
-              <div class="outcome-tab-desc">Defamatory accusation</div>
+              <div class="outcome-tab-desc">Knowingly false repost caption</div>
             </button>
           </div>
 
@@ -1727,22 +1730,22 @@
           <div class="guideline-row">
             <span class="guideline-icon-box" style="background:var(--allow-bg); color:var(--allow-text); border:1px solid var(--allow-border);">✓</span>
             <div>
-              <strong style="color:var(--text-primary);">Service criticism is protected</strong><br/>
-              Reporting slow campus portals with factual screenshots is lawful expression.
+              <strong style="color:var(--text-primary);">Negative reviews aren't auto-removed</strong><br/>
+              Evidence-based software criticism with test results is protected expression.
             </div>
           </div>
           <div class="guideline-row">
             <span class="guideline-icon-box" style="background:var(--flag-bg); color:var(--flag-text); border:1px solid var(--flag-border);">⚑</span>
             <div>
-              <strong style="color:var(--text-primary);">Verify before sharing</strong><br/>
-              Unverified rumors naming staff are held for moderator verification.
+              <strong style="color:var(--text-primary);">Questionable claims need review</strong><br/>
+              Unverified rumors naming staff are held for human moderator verification.
             </div>
           </div>
           <div class="guideline-row">
             <span class="guideline-icon-box" style="background:var(--remove-bg); color:var(--remove-text); border:1px solid var(--remove-border);">✕</span>
             <div>
-              <strong style="color:var(--text-primary);">No false accusations</strong><br/>
-              Knowingly false claims of theft violate Chapter VI Cyber Libel Law.
+              <strong style="color:var(--text-primary);">No knowingly false additions</strong><br/>
+              Adding fabricated accusations when reposting is restricted after review.
             </div>
           </div>
         </div>
@@ -1841,49 +1844,28 @@
 
   <script>
     let currentScenario = 5;
-    const scenarioOrder = [1, 5, 3];
+    const scenarioOrder = [14, 5, 11];
 
     const scenarios = {
-      1: {
+      14: {
         author: "Carlos Mendoza",
-        sub: "BSIT 4th Year • Reported by 1 user • Public Feed",
+        sub: "BSIT 4th Year • Tech Blog • Reported by Software Developer",
         avatar: "CM", bg: "#f0fdf4", col: "#15803d",
-        text: "The university's online enrollment portal is extremely slow. Students are experiencing unnecessary delays, and the IT department should improve its performance so we can finish enrolling on time.",
+        text: "Tech Review: University Portal v2.0 Quality & Security — Our newly deployed campus app has severe latency spikes and exposed API endpoints. Attaching our performance benchmark results, screenshots, and recommendations for the developer team to patch.",
         hasAttachments: true,
-        caseId: "Case #RPT-2026-00108",
-        rawId: "RPT-2026-00108",
-        alertPill: `<span class="status-dot"></span>Reviewed: Service Criticism`,
+        caseId: "Case #RPT-2026-00414",
+        rawId: "RPT-2026-00414",
+        alertPill: `<span class="status-dot"></span>Reviewed: Protected Tech Criticism`,
         alertClass: "status-badge badge-allow",
-        reason: "Complaint about slow enrollment portal performance",
-        target: "University Online Enrollment System (Service)",
-        ident: `<span class="status-badge badge-allow"><span class="status-dot"></span>No individual person accused</span>`,
-        evidence: "2 screenshots showing loading/timeout errors",
+        reason: "Software developer demanded removal citing company reputation damage",
+        target: "Newly Deployed University Software Application (Product/System)",
+        ident: `<span class="status-badge badge-allow"><span class="status-dot"></span>No defamatory imputation against an individual</span>`,
+        evidence: "Screenshots, performance benchmark results, & technical recommendations",
         checks: [true, false, false, false],
-        decTitle: "Post Allowed (Protected Criticism)",
-        decDesc: "This post is allowed on CampusConnect because it expresses legitimate criticism of a campus IT service backed by screenshots and does not defame any identifiable person.",
-        decRationale: "Under Chapter VI (Cyber Libel Law), expressing negative opinions or factual complaints about institutional systems supports accountability and is protected freedom of expression.",
+        decTitle: "Post Allowed (Not All Negative Posts Are Defamatory)",
+        decDesc: "This post is allowed on CampusConnect because it is evidence-based technology criticism supported by screenshots, performance test results, and improvement recommendations—not a malicious defamatory accusation.",
+        decRationale: "Under Chapter VI (Cyber Libel Law), negative opinions or factual reviews criticizing software quality and security weaknesses are protected expression. Removing evidence-based reviews simply because a developer dislikes negative feedback would suppress public accountability and technical transparency.",
         bannerBg: "var(--allow-bg)", bannerBorder: "var(--allow-border)", titleCol: "var(--allow-text)"
-      },
-      3: {
-        author: "Ryan Dela Cruz",
-        sub: "BSCS 4th Year • Reported by 5 users • Public Feed",
-        avatar: "RD", bg: "#fef2f2", col: "#b91c1c",
-        text: "Mark stole ₱30,000 from our capstone project budget! He is a thief and used our group funds for his personal expenses. He should be expelled from the university immediately!",
-        hasAttachments: false,
-        warnReason: "The statement accusing <strong>Mark of stealing ₱30,000</strong> from the capstone project budget imputes a crime (theft) against an identifiable student and must be reviewed for accuracy.",
-        caseId: "Case #RPT-2026-00324",
-        rawId: "RPT-2026-00324",
-        alertPill: `<span class="status-dot"></span>Flagged: Defamation Risk`,
-        alertClass: "status-badge badge-remove",
-        reason: "Knowingly false accusation of theft (₱30,000) against a student",
-        target: "Mark (Capstone Student)",
-        ident: `<span class="status-badge badge-remove"><span class="status-dot"></span>Yes — Target is identifiable</span>`,
-        evidence: "None provided (Knowingly false accusation)",
-        checks: [true, true, true, true],
-        decTitle: "Post Restricted After Human Review",
-        decDesc: "After human moderator review, this post has been restricted because it contains a knowingly false accusation of theft against an identifiable student (Mark) and may severely damage his reputation.",
-        decRationale: "Under CampusConnect rules and Chapter VI (Cyber Libel Law), publicly imputing a crime (stealing ₱30,000) to an identifiable student with knowledge of falsity satisfies the elements of defamation (imputation, publication, identifiability, and malice).",
-        bannerBg: "var(--remove-bg)", bannerBorder: "var(--remove-border)", titleCol: "var(--remove-text)"
       },
       5: {
         author: "Jessa Villanueva",
@@ -1891,26 +1873,47 @@
         avatar: "JV", bg: "#fffbeb", col: "#b45309",
         text: "I just received an anonymous message claiming that Registrar staff member Mr. Hector Dizon has been manipulating students' final grades. Sharing this here so everyone knows what is circulating!",
         hasAttachments: false,
-        warnReason: "The statement naming <strong>Mr. Hector Dizon for allegedly manipulating grades</strong> repeats an <strong>unverified anonymous rumor</strong> without supporting proof and requires moderator verification.",
+        warnReason: "The statement naming <strong>Mr. Hector Dizon for allegedly manipulating grades</strong> repeats an <strong>unverified anonymous rumor</strong> without supporting proof and requires human moderator review.",
         caseId: "Case #RPT-2026-00215",
         rawId: "RPT-2026-00215",
-        alertPill: `<span class="status-dot"></span>Flagged: Unverified Rumor`,
+        alertPill: `<span class="status-dot"></span>Flagged: Questionable Unverified Rumor`,
         alertClass: "status-badge badge-flag",
-        reason: "Republishing an unverified rumor naming a university employee",
+        reason: "Questionable accusation from anonymous source naming a university employee",
         target: "Mr. Hector Dizon (University Employee)",
         ident: `<span class="status-badge badge-flag"><span class="status-dot"></span>Yes — Employee is named</span>`,
-        evidence: "Anonymous rumor only (Requires verification)",
+        evidence: "Anonymous rumor only (Human review needed to verify facts)",
         checks: [true, true, true, true],
-        decTitle: "Post Flagged for Review (Pending Verification)",
-        decDesc: "This post is held for moderator verification because it republishes an anonymous, unverified rumor accusing a named employee of grade manipulation without reliable evidence.",
-        decRationale: "Under Chapter VI (Cyber Libel Law), repeating an unsubstantiated defamatory rumor against a named individual risks reputational harm. Human moderators must verify whether supporting evidence exists before allowing or removing the post.",
+        decTitle: "Post Flagged for Human Review (Pending Verification)",
+        decDesc: "This post is held for human moderator review because it republishes a questionable, unverified rumor accusing a named employee of grade manipulation without reliable evidence.",
+        decRationale: "Under Chapter VI (Cyber Libel Law), questionable accusations naming an identifiable employee cannot be auto-published or arbitrarily deleted without context. Human moderators must check whether any verifiable evidence or official investigation exists before making a final decision.",
         bannerBg: "var(--flag-bg)", bannerBorder: "var(--flag-border)", titleCol: "var(--flag-text)"
+      },
+      11: {
+        author: "Ryan Dela Cruz",
+        sub: "BSCS 4th Year • Shared Post • Reported by 6 users",
+        avatar: "RD", bg: "#fef2f2", col: "#b91c1c",
+        text: "Not only did Mr. Ramon Santos commit misconduct—I know for a fact he also embezzled ₱50,000 from the scholarship fund! Everyone should share this!",
+        hasAttachments: false,
+        warnReason: "While sharing an existing post differs from authoring one, your <strong>newly added accusation</strong> claiming <strong>Mr. Ramon Santos embezzled ₱50,000</strong> is an independent defamatory statement that requires human review.",
+        caseId: "Case #RPT-2026-00511",
+        rawId: "RPT-2026-00511",
+        alertPill: `<span class="status-dot"></span>Flagged: Newly Authored False Accusation`,
+        alertClass: "status-badge badge-remove",
+        reason: "Added a knowingly false crime accusation (embezzlement) when reposting",
+        target: "Mr. Ramon Santos (University Employee)",
+        ident: `<span class="status-badge badge-remove"><span class="status-dot"></span>Yes — Target is explicitly named</span>`,
+        evidence: "None provided (Knowingly false newly authored statement)",
+        checks: [true, true, true, true],
+        decTitle: "Post Restricted After Human Review (Appeal Available)",
+        decDesc: "After human moderator review, this repost was restricted because the user added a newly authored, knowingly false accusation of embezzlement (₱50,000) against an identifiable employee.",
+        decRationale: "Under Chapter VI (Cyber Libel Law), merely reacting to or sharing an existing post is evaluated differently from authoring a new statement. Because the user actively wrote and circulated a new accusation they knew was false, all elements of cyber libel (defamatory imputation, publication, identifiability, and actual malice) are present. An explanation and formal appeal option are provided for due process.",
+        bannerBg: "var(--remove-bg)", bannerBorder: "var(--remove-border)", titleCol: "var(--remove-text)"
       }
     };
 
     function loadScenario(num) {
       currentScenario = num;
-      [1, 3, 5].forEach(n => {
+      [14, 5, 11].forEach(n => {
         document.getElementById('scenbtn-' + n).classList.toggle('scen-active', n === num);
         const otab = document.getElementById('otab-' + n);
         if (otab) otab.classList.toggle('active-tab', n === num);
@@ -1975,7 +1978,7 @@
 
       const warningModal = document.getElementById('warningModal');
       if (screenNum === 3) {
-        if (currentScenario === 1) loadScenario(3);
+        if (currentScenario === 14) loadScenario(5);
         showBaseView(2);
         warningModal.classList.add('open');
       } else {
@@ -1994,8 +1997,8 @@
     }
 
     function submitComposerPost() {
-      if (currentScenario === 1) {
-        alert("Post Published: Scenario 1 is legitimate service criticism with no defamatory imputation against an individual, so it publishes directly to the Campus Feed.");
+      if (currentScenario === 14) {
+        alert("Post Published: Scenario 14 is evidence-based software criticism—not all negative posts should be removed, so it publishes directly to the Campus Feed.");
         jumpScreen(1);
       } else {
         document.getElementById('sbtn-2').classList.remove('active');
