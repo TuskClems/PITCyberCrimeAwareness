@@ -1,0 +1,137 @@
+<mxfile host="app.diagrams.net" modified="2026-11-13T10:00:00.000Z" agent="Antigravity" version="24.7.17" type="device">
+  <diagram id="campusconnect-flowchart" name="CampusConnect User Flowchart (Scenarios 14, 5, 11)">
+    <mxGraphModel dx="1200" dy="850" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#F8FAFC" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title Header -->
+        <mxCell id="title" value="&lt;b style=&quot;font-size:18px; color:#0F172A;&quot;&gt;CampusConnect User Flowchart&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:12px; color:#64748B;&quot;&gt;Cyber Libel Moderation Pipeline — Scenarios 14, 5, &amp;amp; 11 (BSIT 4C • Group 4)&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="260" y="20" width="640" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- TOP COMMON PATH -->
+        <!-- Screen 1 -->
+        <mxCell id="s1" value="&lt;b&gt;Screen 1: Social Media Feed&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px; color:#64748B;&quot;&gt;User browses campus posts, clicks Create Post, or reports content&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;strokeWidth=1.5;fontColor=#0F172A;fontFamily=Helvetica;fontSize=13;arcSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="410" y="90" width="340" height="56" as="geometry" />
+        </mxCell>
+
+        <!-- Screen 2 -->
+        <mxCell id="s2" value="&lt;b&gt;Screen 2: Create a Post&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px; color:#64748B;&quot;&gt;User composes post content, attaches media, and clicks Publish&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;strokeWidth=1.5;fontColor=#0F172A;fontFamily=Helvetica;fontSize=13;arcSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="410" y="180" width="340" height="56" as="geometry" />
+        </mxCell>
+
+        <!-- Decision Gate -->
+        <mxCell id="gate" value="&lt;b&gt;Content Moderation Analysis (Chapter VI Pre-Check)&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px; color:#1E40AF;&quot;&gt;Evaluates defamatory imputation, identifiability, &amp;amp; verification&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#3B82F6;strokeWidth=1.5;fontColor=#1E3A8A;fontFamily=Helvetica;fontSize=13;arcSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="385" y="270" width="390" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Connectors Top Path -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="s1" target="s2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="s2" target="gate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== BRANCH 1: SCENARIO 14 (ALLOW) ==================== -->
+        <mxCell id="b1_scen" value="&lt;b&gt;Scenario 14: Tech Blog Criticizing Software&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px; color:#166534;&quot;&gt;Negative review with test results &amp;amp; security fixes; not defamatory&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#16A34A;strokeWidth=2;fontColor=#0F172A;fontFamily=Helvetica;fontSize=12.5;arcSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="380" width="300" height="64" as="geometry" />
+        </mxCell>
+
+        <mxCell id="b1_act" value="&lt;b&gt;Immediate Publication&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px; color:#64748B;&quot;&gt;Bypasses warning modal; published directly to Screen 1 Feed&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;strokeWidth=1.5;fontColor=#0F172A;fontFamily=Helvetica;fontSize=12.5;arcSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="480" width="300" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="b1_out" value="&lt;b&gt;Outcome 1: Allowed Post&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px; color:#166534;&quot;&gt;Not all negative posts should be removed; protects evidence-based criticism&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0FDF4;strokeColor=#16A34A;strokeWidth=1.5;fontColor=#15803D;fontFamily=Helvetica;fontSize=12.5;arcSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="576" width="300" height="64" as="geometry" />
+        </mxCell>
+
+        <!-- Branch 1 Edges -->
+        <mxCell id="eb1_0" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=1.5;endArrow=block;endFill=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="gate" target="b1_scen">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="580" y="352" />
+              <mxPoint x="210" y="352" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eb1_1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="b1_scen" target="b1_act">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eb1_2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="b1_act" target="b1_out">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== BRANCH 2: SCENARIO 5 (FLAG) ==================== -->
+        <mxCell id="b2_scen" value="&lt;b&gt;Scenario 5: Sharing an Unverified Rumor&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px; color:#92400E;&quot;&gt;Anonymous grade manipulation claim naming a staff member without proof&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D97706;strokeWidth=2;fontColor=#0F172A;fontFamily=Helvetica;fontSize=12.5;arcSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="430" y="380" width="300" height="64" as="geometry" />
+        </mxCell>
+
+        <mxCell id="b2_cw" value="&lt;b&gt;Screen 3: Content Warning Modal&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px; color:#64748B;&quot;&gt;Alerts poster of unverified claim risk; offers Edit, Cancel, or Review&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;strokeWidth=1.5;fontColor=#0F172A;fontFamily=Helvetica;fontSize=12.5;arcSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="430" y="480" width="300" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="b2_hr" value="&lt;b&gt;Screen 4: Human Moderator Review&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px; color:#64748B;&quot;&gt;Checks if corroborating evidence or official investigation exists&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;strokeWidth=1.5;fontColor=#0F172A;fontFamily=Helvetica;fontSize=12.5;arcSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="430" y="576" width="300" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="b2_out" value="&lt;b&gt;Outcome 2: Flag for Review &amp;amp; Verification&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px; color:#92400E;&quot;&gt;Questionable accusations require human review before final decision&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#D97706;strokeWidth=1.5;fontColor=#B45309;fontFamily=Helvetica;fontSize=12.5;arcSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="430" y="672" width="300" height="64" as="geometry" />
+        </mxCell>
+
+        <!-- Branch 2 Edges -->
+        <mxCell id="eb2_0" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="gate" target="b2_scen">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eb2_1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="b2_scen" target="b2_cw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eb2_2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="b2_cw" target="b2_hr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eb2_3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="b2_hr" target="b2_out">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ==================== BRANCH 3: SCENARIO 11 (RESTRICT) ==================== -->
+        <mxCell id="b3_scen" value="&lt;b&gt;Scenario 11: Reposting with Added Accusation&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px; color:#991B1B;&quot;&gt;User shares a post &amp;amp; authors a new embezzlement claim known to be false&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#DC2626;strokeWidth=2;fontColor=#0F172A;fontFamily=Helvetica;fontSize=12.5;arcSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="800" y="380" width="300" height="64" as="geometry" />
+        </mxCell>
+
+        <mxCell id="b3_cw" value="&lt;b&gt;Screen 3: Content Warning Modal&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px; color:#64748B;&quot;&gt;Flags newly authored crime imputation against identifiable employee&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;strokeWidth=1.5;fontColor=#0F172A;fontFamily=Helvetica;fontSize=12.5;arcSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="800" y="480" width="300" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="b3_hr" value="&lt;b&gt;Screen 4: Human Moderator Review&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px; color:#64748B;&quot;&gt;Separates sharing from new false statement; confirms Cyber Libel elements&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;strokeWidth=1.5;fontColor=#0F172A;fontFamily=Helvetica;fontSize=12.5;arcSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="800" y="576" width="300" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="b3_out" value="&lt;b&gt;Outcome 3: Screen 5 — Restricted &amp;amp; Appeal&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px; color:#991B1B;&quot;&gt;Knowingly false accusation removed after review, with explanation &amp;amp; appeal&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF2F2;strokeColor=#DC2626;strokeWidth=1.5;fontColor=#B91C1C;fontFamily=Helvetica;fontSize=12.5;arcSize=12;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="800" y="672" width="300" height="64" as="geometry" />
+        </mxCell>
+
+        <!-- Branch 3 Edges -->
+        <mxCell id="eb3_0" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=1.5;endArrow=block;endFill=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="gate" target="b3_scen">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="580" y="352" />
+              <mxPoint x="950" y="352" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="eb3_1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="b3_scen" target="b3_cw">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eb3_2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="b3_cw" target="b3_hr">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="eb3_3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748B;strokeWidth=1.5;endArrow=block;endFill=1;" edge="1" parent="1" source="b3_hr" target="b3_out">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
+
