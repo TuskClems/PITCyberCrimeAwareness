@@ -3,39 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CampusConnect — Cyber Libel Moderation Prototype</title>
+  <title>CampusConnect — Cyber Libel-Aware Campus Platform</title>
   <style>
     :root {
-      /* Canvas & Surfaces */
-      --bg-app: #f4f6fb;
+      /* Warm Neutral & Crisp Surface Palette */
+      --bg-app: #f3f4f6;
       --bg-surface: #ffffff;
-      --bg-subtle: #f8fafc;
-      --bg-tint: #eef2ff;
-      --border-default: #e2e8f0;
-      --border-strong: #cbd5e1;
+      --bg-subtle: #f9fafb;
+      --border-default: #e5e7eb;
+      --border-strong: #d1d5db;
 
-      /* Text */
-      --text-primary: #0f172a;
-      --text-secondary: #334155;
-      --text-muted: #64748b;
-      --text-faint: #94a3b8;
+      /* Typography */
+      --text-primary: #111827;
+      --text-secondary: #374151;
+      --text-muted: #6b7280;
+      --text-faint: #9ca3af;
 
-      /* Figma Brand Palette (Deep Navy + Royal Blue + Gold Accent) */
-      --navy-900: #111c4e;
-      --navy-800: #162463;
-      --navy-700: #1e3282;
-      --brand: #2f54c6;
-      --brand-hover: #2443a6;
-      --brand-pill: #3b66e0;
-      --gold: #eab308;
-      --gold-bright: #facc15;
-      --gold-text: #111c4e;
+      /* Original Brand Accent: Deep Civic Teal / Emerald */
+      --brand: #0f766e;
+      --brand-hover: #115e59;
+      --brand-light: #14b8a6;
+      --brand-soft: #f0fdfa;
+      --brand-border: #99f6e4;
 
       /* Semantic Status Colors */
-      --allow-bg: #f0fdf4;
-      --allow-border: #bbf7d0;
-      --allow-text: #15803d;
-      --allow-dot: #22c55e;
+      --allow-bg: #ecfdf5;
+      --allow-border: #a7f3d0;
+      --allow-text: #047857;
+      --allow-dot: #10b981;
 
       --flag-bg: #fffbeb;
       --flag-border: #fde68a;
@@ -47,20 +42,16 @@
       --remove-text: #b91c1c;
       --remove-dot: #ef4444;
 
-      /* Radii & Shadows */
+      /* Radii & Elevation */
       --radius-sm: 6px;
       --radius-md: 10px;
       --radius-lg: 14px;
-      --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
-      --shadow-sm: 0 2px 6px rgba(15, 23, 42, 0.05);
-      --shadow-lg: 0 20px 25px -5px rgba(15, 23, 42, 0.18), 0 8px 10px -6px rgba(15, 23, 42, 0.1);
+      --shadow-xs: 0 1px 2px rgba(17, 24, 39, 0.04);
+      --shadow-sm: 0 1px 3px rgba(17, 24, 39, 0.07), 0 1px 2px rgba(17, 24, 39, 0.04);
+      --shadow-lg: 0 20px 25px -5px rgba(17, 24, 39, 0.16), 0 8px 10px -6px rgba(17, 24, 39, 0.08);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body {
       height: 100vh;
@@ -75,34 +66,28 @@
       flex-direction: column;
     }
 
-    button, input, textarea {
-      font-family: inherit;
-    }
+    button, input, textarea, select { font-family: inherit; }
 
     /* =====================================================================
-       1. TOP PROTOTYPE UTILITY BAR (Compact Presentation Switcher)
+       1. TOP PROTOTYPE UTILITY BAR (Presentation Switcher)
        ===================================================================== */
     .presenter-bar {
       height: 36px;
-      background-color: #090e21;
-      color: #cbd5e1;
-      padding: 0 18px;
+      background-color: #18181b;
+      color: #d4d4d8;
+      padding: 0 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid #1e293b;
+      border-bottom: 1px solid #27272a;
       font-size: 11.5px;
       flex-shrink: 0;
       z-index: 50;
     }
-    .presenter-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .presenter-group { display: flex; align-items: center; gap: 8px; }
     .presenter-label {
-      color: #64748b;
-      font-weight: 600;
+      color: #71717a;
+      font-weight: 700;
       text-transform: uppercase;
       font-size: 10px;
       letter-spacing: 0.06em;
@@ -111,209 +96,116 @@
       display: inline-flex;
       align-items: center;
       gap: 2px;
-      background: #111827;
+      background: #27272a;
       padding: 2px;
       border-radius: var(--radius-sm);
-      border: 1px solid #1f2937;
     }
     .p-btn {
       background: transparent;
-      color: #94a3b8;
+      color: #a1a1aa;
       border: 1px solid transparent;
       padding: 3px 9px;
       border-radius: 4px;
       font-size: 11px;
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all 0.14s ease;
     }
-    .p-btn:hover { color: #f8fafc; background: rgba(255,255,255,0.06); }
-    .p-btn.active { background: var(--brand-pill); color: #ffffff; font-weight: 600; }
-    .p-btn.scen-active { background: #14532d; color: #dcfce7; border-color: #22c55e; font-weight: 600; }
+    .p-btn:hover { color: #ffffff; background: rgba(255,255,255,0.06); }
+    .p-btn.active { background: var(--brand); color: #ffffff; font-weight: 600; }
+    .p-btn.scen-active { background: #064e3b; color: #a7f3d0; border-color: #10b981; font-weight: 600; }
 
     /* =====================================================================
-       2. APP SHELL: FULL-HEIGHT NAVY SIDEBAR + MAIN AREA
+       2. TOP HORIZONTAL APP HEADER (Original Civic Teal Bar)
        ===================================================================== */
-    .app-shell {
-      flex: 1;
+    .app-topbar {
+      height: 62px;
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border-default);
+      padding: 0 24px;
       display: flex;
-      min-height: 0;
-      overflow: hidden;
-    }
-
-    /* Constant Left Navy Sidebar */
-    .left-sidebar {
-      width: 244px;
-      flex-shrink: 0;
-      background: linear-gradient(180deg, var(--navy-900) 0%, #0e1844 100%);
-      color: #e2e8f0;
-      padding: 20px 16px 18px;
-      display: flex;
-      flex-direction: column;
+      align-items: center;
       justify-content: space-between;
-      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      gap: 16px;
+      flex-shrink: 0;
+      z-index: 30;
     }
-
     .brand {
       display: flex;
       align-items: center;
-      gap: 11px;
-      padding: 2px 4px 20px;
+      gap: 10px;
       cursor: pointer;
+      flex-shrink: 0;
     }
     .brand-logo {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      background: var(--gold-bright);
-      color: var(--navy-900);
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%);
+      color: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
-      box-shadow: 0 2px 8px rgba(250, 204, 21, 0.25);
-    }
-    .brand-text {
-      display: flex;
-      flex-direction: column;
+      box-shadow: 0 2px 6px rgba(15, 118, 110, 0.25);
     }
     .brand-name {
       font-size: 15.5px;
+      font-weight: 800;
+      color: var(--text-primary);
+      letter-spacing: -0.02em;
+    }
+    .brand-pill {
+      font-size: 10.5px;
       font-weight: 700;
-      color: #ffffff;
-      letter-spacing: -0.01em;
-      line-height: 1.2;
-    }
-    .brand-sub {
-      font-size: 11px;
-      color: #93a8e2;
-      font-weight: 500;
-    }
-
-    .nav-section-header {
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #6d82bf;
-      padding: 0 12px;
-      margin-bottom: 8px;
-    }
-    .nav-list {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .side-link {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 12px;
-      border-radius: var(--radius-md);
-      background: transparent;
-      border: none;
-      color: #cbd5f5;
-      font-size: 13.5px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      text-align: left;
-    }
-    .side-link-left {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-    }
-    .side-link svg {
-      width: 17px;
-      height: 17px;
-      opacity: 0.85;
-      flex-shrink: 0;
-    }
-    .side-link:hover {
-      background: rgba(255, 255, 255, 0.08);
-      color: #ffffff;
-    }
-    .side-link.active {
-      background: var(--brand-pill);
-      color: #ffffff;
-      font-weight: 600;
-      box-shadow: 0 2px 8px rgba(59, 102, 224, 0.35);
-    }
-    .side-link.active svg {
-      opacity: 1;
-    }
-    .side-pill-count {
-      background: rgba(250, 204, 21, 0.18);
-      color: var(--gold-bright);
-      border: 1px solid rgba(250, 204, 21, 0.35);
-      font-size: 11px;
-      font-weight: 700;
-      padding: 1px 7px;
+      color: var(--brand);
+      background: var(--brand-soft);
+      border: 1px solid var(--brand-border);
+      padding: 2px 8px;
       border-radius: 999px;
     }
 
-    .sidebar-legal-card {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.11);
-      border-radius: var(--radius-md);
-      padding: 12px 13px;
-      font-size: 11.5px;
-      line-height: 1.45;
-      color: #b7c6ef;
+    .top-nav-tabs {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 100%;
     }
-    .sidebar-legal-title {
-      color: var(--gold-bright);
-      font-weight: 700;
-      font-size: 11.5px;
-      margin-bottom: 4px;
+    .top-tab {
+      height: 100%;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 13px;
+      background: transparent;
+      border: none;
+      border-bottom: 2.5px solid transparent;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
     }
-    .sidebar-group-meta {
-      margin-top: 8px;
-      padding-top: 8px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    .top-tab svg { width: 15px; height: 15px; }
+    .top-tab:hover { color: var(--text-primary); background: var(--bg-subtle); }
+    .top-tab.active {
+      color: var(--brand);
+      border-bottom-color: var(--brand);
+      background: var(--brand-soft);
+    }
+    .tab-badge {
+      background: var(--brand);
+      color: #ffffff;
       font-size: 10.5px;
-      color: #8296cf;
-    }
-
-    /* Right Column: Fixed Top Navbar + Scrollable Body */
-    .main-column {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      min-width: 0;
-      min-height: 0;
-    }
-
-    .app-navbar {
-      height: 62px;
-      background-color: var(--bg-surface);
-      border-bottom: 1px solid var(--border-default);
-      padding: 0 28px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-    }
-    .page-heading {
-      font-size: 18px;
       font-weight: 700;
-      color: var(--text-primary);
-      letter-spacing: -0.015em;
+      padding: 1px 6px;
+      border-radius: 999px;
     }
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .search-wrapper {
-      position: relative;
-      width: 240px;
-    }
+
+    .nav-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .search-wrapper { position: relative; width: 205px; }
     .search-icon {
       position: absolute;
-      left: 12px;
+      left: 11px;
       top: 50%;
       transform: translateY(-50%);
       color: var(--text-faint);
@@ -322,27 +214,25 @@
     }
     .search-input {
       width: 100%;
-      height: 36px;
-      padding: 0 14px 0 36px;
-      background: #f1f5f9;
-      border: 1px solid transparent;
-      border-radius: 999px;
-      font-size: 13px;
+      height: 35px;
+      padding: 0 12px 0 33px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      font-size: 12.5px;
       color: var(--text-primary);
       outline: none;
-      transition: all 0.15s ease;
     }
-    .search-input::placeholder { color: var(--text-muted); }
     .search-input:focus {
       background: #ffffff;
-      border-color: var(--brand-pill);
-      box-shadow: 0 0 0 3px rgba(59, 102, 224, 0.12);
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
     }
     .icon-btn {
       position: relative;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
+      width: 35px;
+      height: 35px;
+      border-radius: var(--radius-md);
       border: 1px solid var(--border-default);
       background: #ffffff;
       color: var(--text-secondary);
@@ -350,56 +240,65 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all 0.15s ease;
     }
-    .icon-btn:hover { background: var(--bg-subtle); color: var(--text-primary); }
+    .icon-btn:hover { background: var(--bg-subtle); }
     .notif-counter {
       position: absolute;
-      top: -3px;
-      right: -3px;
+      top: -4px;
+      right: -4px;
       background: #ef4444;
       color: #ffffff;
       font-size: 10px;
       font-weight: 700;
       min-width: 16px;
       height: 16px;
-      padding: 0 4px;
       border-radius: 999px;
       display: flex;
       align-items: center;
       justify-content: center;
       border: 2px solid #ffffff;
     }
-    .user-avatar-btn {
-      width: 36px;
-      height: 36px;
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px 4px 4px;
+      border-radius: 999px;
+      border: 1px solid var(--border-default);
+      background: var(--bg-subtle);
+      cursor: pointer;
+    }
+    .user-chip-av {
+      width: 27px;
+      height: 27px;
       border-radius: 50%;
       background: var(--brand);
       color: #ffffff;
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 700;
-      border: none;
-      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
     }
+    .user-chip-name { font-size: 12px; font-weight: 600; color: var(--text-primary); }
 
-    /* Scrollable Workspace Content */
-    .center-scroll {
+    /* =====================================================================
+       3. SCROLLABLE WORKSPACE CONTAINER
+       ===================================================================== */
+    .workspace-scroll {
       flex: 1;
       overflow-y: auto;
-      padding: 24px 28px 36px;
+      padding: 22px 24px 40px;
       min-height: 0;
     }
-    .center-scroll::-webkit-scrollbar { width: 7px; }
-    .center-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+    .workspace-scroll::-webkit-scrollbar { width: 7px; }
+    .workspace-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 999px; }
 
-    .view { display: none; max-width: 1120px; margin: 0 auto; }
+    .view { display: none; max-width: 1240px; margin: 0 auto; }
     .view.active { display: block; }
 
     /* =====================================================================
-       3. SHARED CARDS, BUTTONS & BADGES
+       4. SHARED COMPONENTS
        ===================================================================== */
     .card {
       background: var(--bg-surface);
@@ -407,36 +306,22 @@
       border-radius: var(--radius-lg);
       box-shadow: var(--shadow-xs);
     }
-
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 7px;
-      padding: 9px 16px;
+      gap: 6px;
+      padding: 8px 15px;
       border-radius: var(--radius-md);
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       border: 1px solid transparent;
-      transition: all 0.15s ease;
+      transition: all 0.14s ease;
     }
-    .btn-primary {
-      background: var(--brand);
-      color: #ffffff;
-    }
+    .btn-primary { background: var(--brand); color: #ffffff; }
     .btn-primary:hover { background: var(--brand-hover); }
-    .btn-gold {
-      background: var(--gold-bright);
-      color: var(--navy-900);
-      font-weight: 700;
-    }
-    .btn-gold:hover { background: #eab308; }
-    .btn-secondary {
-      background: #ffffff;
-      color: var(--text-secondary);
-      border-color: var(--border-strong);
-    }
+    .btn-secondary { background: #ffffff; color: var(--text-secondary); border-color: var(--border-strong); }
     .btn-secondary:hover { background: var(--bg-subtle); color: var(--text-primary); }
 
     .avatar {
@@ -471,172 +356,56 @@
     .badge-flag .status-dot { background: var(--flag-dot); }
     .badge-remove { background: var(--remove-bg); color: var(--remove-text); border-color: var(--remove-border); }
     .badge-remove .status-dot { background: var(--remove-dot); }
-    .badge-info { background: #eef2ff; color: var(--brand); border-color: #c7d2fe; }
+    .badge-teal { background: var(--brand-soft); color: var(--brand); border-color: var(--brand-border); }
 
     /* =====================================================================
-       4. SCREEN 1: CAMPUS FEED (2-Column: Feed + Right Widgets)
+       5. SCREEN 1: 3-COLUMN CIVIC FEED LAYOUT
        ===================================================================== */
-    .feed-grid {
+    .feed-three-col {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 300px;
-      gap: 22px;
+      grid-template-columns: 245px minmax(0, 1fr) 275px;
+      gap: 20px;
       align-items: start;
     }
-    .feed-main { display: flex; flex-direction: column; gap: 14px; }
-    .feed-side { display: flex; flex-direction: column; gap: 14px; }
-
-    .composer-trigger-card {
-      padding: 14px 16px;
+    .sticky-col {
       display: flex;
-      align-items: center;
-      gap: 12px;
+      flex-direction: column;
+      gap: 14px;
     }
-    .composer-trigger-btn {
-      flex: 1;
-      height: 40px;
-      border-radius: 999px;
-      border: 1px solid var(--border-default);
-      background: var(--bg-subtle);
-      color: var(--text-muted);
-      text-align: left;
-      padding: 0 16px;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .composer-trigger-btn:hover { background: #eef2f7; border-color: var(--border-strong); }
-
-    .label-filter-bar {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-      padding: 2px 2px 4px;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-    .label-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 4px 10px;
-      border-radius: var(--radius-sm);
-      font-size: 11.5px;
-      font-weight: 600;
-      border: 1px solid transparent;
-    }
-
-    .feed-card { padding: 18px 20px; }
-    .feed-card-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-    .feed-author-wrap { display: flex; align-items: center; gap: 11px; }
-    .feed-author-name { font-size: 14px; font-weight: 700; color: var(--text-primary); }
-    .feed-author-meta { font-size: 12px; color: var(--text-muted); }
-    .feed-body {
-      font-size: 13.8px;
-      color: var(--text-secondary);
-      line-height: 1.55;
-      margin-bottom: 12px;
-    }
-    .feed-meta-pills {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
-    }
-    .meta-pill-muted {
-      background: #f1f5f9;
-      color: var(--text-muted);
-      font-size: 11.5px;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 999px;
-    }
-    .feed-evidence-box {
-      background: #f8fafc;
-      border: 1px solid var(--border-default);
-      border-radius: var(--radius-md);
-      padding: 12px 14px;
-      margin-bottom: 12px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    .evidence-mini {
-      background: #ffffff;
-      border: 1px solid var(--border-default);
-      border-radius: var(--radius-sm);
-      padding: 9px 11px;
-      font-size: 11.5px;
-    }
-    .evidence-mini-title { font-weight: 700; color: var(--text-primary); margin-bottom: 2px; }
-    .evidence-mini-sub { color: var(--text-muted); font-size: 11px; }
-
-    .feed-actions {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-top: 10px;
-      border-top: 1px solid var(--border-default);
-    }
-    .feed-action-group { display: flex; gap: 6px; }
-    .action-pill-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border-default);
-      background: #ffffff;
-      color: var(--text-secondary);
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .action-pill-btn:hover { background: var(--bg-subtle); }
-    .action-pill-btn.report { color: var(--remove-text); background: var(--remove-bg); border-color: var(--remove-border); }
-
-    /* Right Sidebar Widgets */
-    .navy-widget-card {
-      background: linear-gradient(145deg, var(--navy-800) 0%, var(--navy-900) 100%);
-      color: #ffffff;
-      border-radius: var(--radius-lg);
-      padding: 18px;
-      box-shadow: var(--shadow-sm);
-    }
-    .navy-widget-card h3 { font-size: 14.5px; font-weight: 700; margin-bottom: 6px; }
-    .navy-widget-card p { font-size: 12.5px; color: #cbd5f5; line-height: 1.5; }
-
     .widget-card { padding: 16px 18px; }
-    .widget-title { font-size: 13.5px; font-weight: 700; color: var(--text-primary); margin-bottom: 12px; }
-    .open-report-row {
+    .widget-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
-      gap: 9px;
-      padding: 7px 6px;
-      border-radius: var(--radius-sm);
-      font-size: 12.5px;
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: background 0.12s;
+      justify-content: space-between;
     }
-    .open-report-row:hover { background: var(--bg-subtle); color: var(--text-primary); }
-    .dot-ind { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 
-    .soft-blue-card {
-      background: #eef2ff;
-      border: 1px solid #dbe4ff;
-      border-radius: var(--radius-lg);
-      padding: 15px 17px;
+    .filter-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 12.5px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-bottom: 3px;
+      text-align: left;
     }
-    .soft-blue-card h4 { font-size: 13px; font-weight: 700; color: var(--navy-800); margin-bottom: 4px; }
-    .soft-blue-card p { font-size: 12px; color: #3b4b75; line-height: 1.45; }
+    .filter-btn:hover { background: var(--bg-subtle); }
+    .filter-btn.active {
+      background: var(--brand-soft);
+      color: var(--brand);
+      border-color: var(--brand-border);
+      font-weight: 700;
+    }
 
     .member-row {
       display: flex;
@@ -651,83 +420,151 @@
       width: 26px;
       height: 26px;
       border-radius: 50%;
-      background: #e2e8f0;
-      color: #334155;
+      background: var(--brand-soft);
+      color: var(--brand);
+      border: 1px solid var(--brand-border);
       font-size: 10px;
       font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
 
-    /* =====================================================================
-       5. SCREEN 2: CREATE A POST (2-Column: Editor + Live Preview)
-       ===================================================================== */
-    .create-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 330px;
-      gap: 22px;
-      align-items: start;
+    .feed-main { display: flex; flex-direction: column; gap: 14px; }
+    .compose-strip {
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-top: 3px solid var(--brand);
     }
-    .create-card { padding: 22px 24px; }
-    .create-card h2 { font-size: 16px; font-weight: 700; margin-bottom: 14px; }
-    .composer-textarea {
-      width: 100%;
-      min-height: 150px;
+    .compose-trigger {
+      flex: 1;
+      height: 40px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-default);
+      background: var(--bg-subtle);
+      color: var(--text-muted);
+      text-align: left;
+      padding: 0 14px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .compose-trigger:hover { border-color: var(--border-strong); background: #f3f4f6; }
+
+    .feed-card {
+      padding: 18px 20px;
+      border-left: 4px solid var(--border-default);
+    }
+    .feed-card.accent-allow { border-left-color: var(--allow-dot); }
+    .feed-card.accent-flag { border-left-color: var(--flag-dot); }
+    .feed-card.accent-remove { border-left-color: var(--remove-dot); }
+
+    .feed-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .feed-author-wrap { display: flex; align-items: center; gap: 11px; }
+    .feed-author-name { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+    .feed-author-meta { font-size: 12px; color: var(--text-muted); }
+    .feed-body { font-size: 13.8px; color: var(--text-secondary); line-height: 1.58; margin-bottom: 12px; }
+
+    .feed-evidence-box {
+      background: var(--bg-subtle);
       border: 1px solid var(--border-default);
       border-radius: var(--radius-md);
-      padding: 14px;
-      font-size: 13.8px;
-      color: var(--text-primary);
-      background: #fcfdff;
-      resize: vertical;
-      outline: none;
-      margin: 14px 0 12px;
-      line-height: 1.55;
+      padding: 11px 13px;
+      margin-bottom: 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
     }
-    .composer-textarea:focus {
-      border-color: var(--brand-pill);
-      box-shadow: 0 0 0 3px rgba(59, 102, 224, 0.12);
+    .evidence-mini {
+      background: #ffffff;
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-sm);
+      padding: 8px 10px;
+      font-size: 11.5px;
     }
-    .composer-tools-row {
+    .evidence-mini-title { font-weight: 700; color: var(--text-primary); }
+    .evidence-mini-sub { color: var(--text-muted); font-size: 11px; }
+
+    .feed-actions {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 14px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-default);
     }
-    .tool-chips { display: flex; gap: 8px; flex-wrap: wrap; }
-    .tool-chip {
-      background: #f1f5f9;
-      border: 1px solid var(--border-default);
-      color: var(--text-secondary);
+    .action-pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
       padding: 5px 11px;
       border-radius: var(--radius-sm);
+      border: 1px solid var(--border-default);
+      background: #ffffff;
+      color: var(--text-secondary);
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
     }
-    .tool-chip:hover { background: #e2e8f0; }
+    .action-pill-btn:hover { background: var(--bg-subtle); }
+    .action-pill-btn.report { color: var(--remove-text); background: var(--remove-bg); border-color: var(--remove-border); }
 
-    .precheck-notice {
-      background: #eff4ff;
-      border: 1px solid #dbe4ff;
-      border-radius: var(--radius-md);
-      padding: 11px 14px;
-      font-size: 12.5px;
-      color: #263b73;
+    .policy-item {
       display: flex;
-      align-items: flex-start;
       gap: 9px;
-      margin-bottom: 18px;
+      align-items: flex-start;
+      padding: 7px 0;
+      border-bottom: 1px solid var(--border-default);
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .policy-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .policy-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      background: var(--brand-soft);
+      color: var(--brand);
+      font-weight: 700;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
     }
 
-    .step-list-item {
+    /* =====================================================================
+       6. SCREEN 2: CREATE A POST STUDIO
+       ===================================================================== */
+    .stepper-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+    .step-pill {
+      background: #ffffff;
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       gap: 10px;
-      margin-bottom: 12px;
       font-size: 12.5px;
-      color: var(--text-secondary);
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .step-pill.current {
+      border-color: var(--brand);
+      background: var(--brand-soft);
+      color: var(--brand);
     }
     .step-num {
       width: 22px;
@@ -743,95 +580,128 @@
       flex-shrink: 0;
     }
 
-    /* =====================================================================
-       6. SCREEN 4: MODERATION DASHBOARD (Queue + Detail Split)
-       ===================================================================== */
-    .mod-grid {
+    .create-grid {
       display: grid;
-      grid-template-columns: 280px minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1.3fr) 340px;
       gap: 20px;
       align-items: start;
     }
-    .queue-col { display: flex; flex-direction: column; gap: 10px; }
-    .queue-heading { font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 2px; }
-    .queue-item {
+    .create-card { padding: 22px 24px; }
+    .composer-textarea {
+      width: 100%;
+      min-height: 145px;
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-md);
+      padding: 13px;
+      font-size: 13.8px;
+      color: var(--text-primary);
+      background: #ffffff;
+      resize: vertical;
+      outline: none;
+      margin: 14px 0 12px;
+      line-height: 1.55;
+    }
+    .composer-textarea:focus {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+    }
+    .composer-tools-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .tool-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+    .tool-chip {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-default);
+      color: var(--text-secondary);
+      padding: 5px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .tool-chip:hover { background: #e5e7eb; }
+    .precheck-notice {
+      background: var(--brand-soft);
+      border: 1px solid var(--brand-border);
+      border-radius: var(--radius-md);
+      padding: 11px 13px;
+      font-size: 12.5px;
+      color: #134e4a;
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      margin-bottom: 16px;
+    }
+
+    /* =====================================================================
+       7. SCREEN 4: HORIZONTAL CASE BAR + SPLIT REVIEW WORKSPACE
+       ===================================================================== */
+    .case-switcher-bar {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
+      gap: 12px;
+      align-items: stretch;
+      margin-bottom: 18px;
+    }
+    .case-tab-card {
       background: #ffffff;
       border: 1px solid var(--border-default);
       border-radius: var(--radius-md);
-      padding: 13px 14px;
+      padding: 12px 14px;
       cursor: pointer;
-      transition: all 0.15s ease;
-    }
-    .queue-item:hover { border-color: var(--border-strong); }
-    .queue-item.active-tab {
-      border-color: var(--gold);
-      box-shadow: 0 0 0 2px rgba(234, 179, 8, 0.2);
-      background: #fffef7;
-    }
-    .queue-item-top {
+      transition: all 0.14s ease;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 6px;
+      flex-direction: column;
+      gap: 4px;
     }
-    .queue-scen-pill {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--brand);
-      background: #eef2ff;
-      padding: 2px 8px;
-      border-radius: 999px;
+    .case-tab-card:hover { border-color: var(--border-strong); }
+    .case-tab-card.active-tab {
+      border-color: var(--brand);
+      background: var(--brand-soft);
+      box-shadow: 0 0 0 2px rgba(15, 118, 110, 0.12);
     }
-    .queue-item-title { font-size: 13px; font-weight: 700; color: var(--text-primary); }
-    .queue-item-author { font-size: 11.5px; color: var(--text-muted); margin-bottom: 8px; }
+    .case-tab-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .case-tab-title { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+    .case-tab-sub { font-size: 11.5px; color: var(--text-muted); }
 
-    .mod-detail-card { padding: 22px 24px; }
-    .mod-detail-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 16px;
+    .mod-split-workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+      gap: 18px;
+      align-items: start;
     }
-    .mod-title-group { display: flex; align-items: center; gap: 12px; }
-    .mod-icon-badge {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      background: var(--flag-bg);
-      border: 1px solid var(--flag-border);
-      color: var(--flag-text);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
+    .mod-panel { padding: 20px 22px; }
     .mod-quoted-post {
       background: var(--bg-subtle);
       border: 1px solid var(--border-default);
       border-radius: var(--radius-md);
-      padding: 14px 16px;
-      margin-bottom: 16px;
+      padding: 13px 15px;
+      margin-bottom: 14px;
     }
     .kv-grid {
       display: grid;
-      grid-template-columns: 140px 1fr;
+      grid-template-columns: 125px 1fr;
       border: 1px solid var(--border-default);
       border-radius: var(--radius-md);
       overflow: hidden;
-      margin-bottom: 18px;
+      margin-bottom: 14px;
       font-size: 12.5px;
     }
     .kv-key {
-      background: #f8fafc;
-      padding: 9px 12px;
+      background: var(--bg-subtle);
+      padding: 8px 11px;
       font-weight: 600;
       color: var(--text-muted);
       border-bottom: 1px solid var(--border-default);
       border-right: 1px solid var(--border-default);
     }
     .kv-val {
-      padding: 9px 12px;
+      padding: 8px 11px;
       color: var(--text-primary);
       border-bottom: 1px solid var(--border-default);
       background: #ffffff;
@@ -845,14 +715,10 @@
       gap: 10px;
       margin-bottom: 8px;
     }
-    .checklist-heading {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-primary);
-    }
+    .checklist-heading { font-size: 13.5px; font-weight: 700; color: var(--text-primary); }
     .criteria-progress-track {
       height: 6px;
-      background: #e2e8f0;
+      background: #e5e7eb;
       border-radius: 999px;
       overflow: hidden;
       margin-bottom: 12px;
@@ -866,16 +732,15 @@
     .checklist-rows { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
     .check-row {
       display: grid;
-      grid-template-columns: 185px 68px 1fr;
+      grid-template-columns: 175px 60px 1fr;
       align-items: center;
-      gap: 10px;
-      padding: 10px 13px;
+      gap: 8px;
+      padding: 9px 12px;
       border: 1px solid var(--border-default);
       border-radius: var(--radius-md);
       background: #ffffff;
       cursor: pointer;
-      transition: all 0.15s ease;
-      font-size: 12.5px;
+      font-size: 12px;
     }
     .check-row:hover { border-color: var(--border-strong); }
     .check-row.checked { background: #fffafa; border-color: #fecaca; }
@@ -885,9 +750,9 @@
       text-align: center;
       font-size: 11px;
       font-weight: 700;
-      padding: 2px 8px;
+      padding: 2px 7px;
       border-radius: 999px;
-      background: #f1f5f9;
+      background: #f3f4f6;
       color: var(--text-muted);
     }
     .check-row.checked .check-pill {
@@ -898,107 +763,86 @@
     .criteria-subgrid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-bottom: 16px;
+      gap: 8px;
+      margin-bottom: 14px;
     }
     .criteria-mini-card {
-      background: #f8fafc;
+      background: var(--bg-subtle);
       border: 1px solid var(--border-default);
       border-radius: var(--radius-md);
-      padding: 10px 12px;
+      padding: 9px 10px;
     }
     .criteria-mini-label {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.04em;
       color: var(--text-muted);
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
-    .criteria-mini-val {
-      font-size: 12.5px;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
+    .criteria-mini-val { font-size: 12px; font-weight: 700; color: var(--text-primary); }
 
     .mod-guidance-box {
-      background: #eff4ff;
-      border: 1px solid #dbe4ff;
+      background: var(--brand-soft);
+      border: 1px solid var(--brand-border);
       border-radius: var(--radius-md);
-      padding: 12px 14px;
+      padding: 11px 13px;
       font-size: 12.5px;
-      color: #243b73;
-      margin-bottom: 18px;
+      color: #134e4a;
       line-height: 1.5;
     }
 
     .mod-cta-row {
       display: grid;
-      grid-template-columns: 1fr 1.25fr 1fr;
-      gap: 10px;
+      grid-template-columns: 1fr 1.2fr 1fr;
+      gap: 9px;
     }
-    .cta-allow {
-      background: var(--allow-bg);
-      color: var(--allow-text);
-      border: 1px solid var(--allow-border);
-    }
-    .cta-allow:hover { background: #dcfce7; }
-    .cta-flag {
-      background: #ca8a04;
-      color: #ffffff;
-      border: 1px solid #a16207;
-    }
-    .cta-flag:hover { background: #a16207; }
-    .cta-remove {
-      background: #ffffff;
-      color: var(--remove-text);
-      border: 1px solid var(--remove-border);
-    }
+    .cta-allow { background: var(--allow-bg); color: var(--allow-text); border: 1px solid var(--allow-border); }
+    .cta-allow:hover { background: #d1fae5; }
+    .cta-flag { background: #d97706; color: #ffffff; border: 1px solid #b45309; }
+    .cta-flag:hover { background: #b45309; }
+    .cta-remove { background: #ffffff; color: var(--remove-text); border: 1px solid var(--remove-border); }
     .cta-remove:hover { background: var(--remove-bg); }
 
     /* =====================================================================
-       7. SCREEN 5: DECISION & APPEAL + SCREEN 6: SCENARIO ANALYSIS
+       8. SCREEN 5 (DECISION & APPEAL) & SCREEN 6 (SCENARIO ANALYSIS)
        ===================================================================== */
     .decision-banner {
       border-radius: var(--radius-lg);
       padding: 20px 22px;
       border: 1px solid var(--border-default);
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
-    .decision-banner h2 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+    .decision-banner h2 { font-size: 17px; font-weight: 700; }
 
-    .analysis-hero {
-      background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-700) 100%);
-      color: #ffffff;
+    .analysis-header-card {
+      background: #ffffff;
+      border: 1px solid var(--border-default);
+      border-left: 5px solid var(--brand);
       border-radius: var(--radius-lg);
-      padding: 22px 24px;
+      padding: 20px 24px;
       margin-bottom: 18px;
     }
-    .analysis-hero h2 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
-    .analysis-hero p { font-size: 13px; color: #cbd5f5; }
+    .analysis-header-card h2 { font-size: 18px; font-weight: 800; color: var(--text-primary); margin-bottom: 4px; }
+    .analysis-header-card p { font-size: 13px; color: var(--text-muted); }
 
     .analysis-cols {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 16px;
     }
-    .analysis-card {
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 11px;
-    }
-    .analysis-card h3 { font-size: 14.5px; font-weight: 700; color: var(--navy-900); }
+    .analysis-card { padding: 18px 20px; display: flex; flex-direction: column; gap: 11px; }
+    .analysis-card h3 { font-size: 14.5px; font-weight: 700; color: var(--text-primary); }
     .analysis-sec-label { font-size: 11.5px; font-weight: 700; margin-bottom: 2px; }
-    .analysis-sec-text { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+    .analysis-sec-text { font-size: 12.2px; color: var(--text-secondary); line-height: 1.5; }
 
     /* =====================================================================
-       8. POPUP MODALS (Content Warning, Publish Success, Written Appeal)
+       9. POPUP MODALS
        ===================================================================== */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.58);
+      background: rgba(17, 24, 39, 0.56);
       backdrop-filter: blur(3px);
       display: none;
       align-items: center;
@@ -1027,49 +871,24 @@
       font-weight: 700;
       color: var(--flag-text);
     }
-    .modal-header-success {
-      background: var(--allow-bg);
-      border-bottom-color: var(--allow-border);
-      color: var(--allow-text);
-    }
-    .modal-header-navy {
-      background: var(--navy-900);
-      border-bottom-color: var(--navy-700);
-      color: #ffffff;
-    }
-    .modal-header-title {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 14.5px;
-    }
+    .modal-header-success { background: var(--allow-bg); border-bottom-color: var(--allow-border); color: var(--allow-text); }
+    .modal-header-teal { background: var(--brand); border-bottom-color: var(--brand-hover); color: #ffffff; }
+    .modal-header-title { display: flex; align-items: center; gap: 9px; font-size: 14.5px; }
     .modal-close-btn {
       width: 28px;
       height: 28px;
       border-radius: 6px;
-      border: 1px solid transparent;
-      background: rgba(15, 23, 42, 0.06);
+      border: none;
+      background: rgba(17, 24, 39, 0.08);
       color: inherit;
       font-size: 16px;
-      line-height: 1;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
     }
-    .modal-close-btn:hover { background: rgba(15, 23, 42, 0.12); }
-    .warning-dialog-body {
-      padding: 20px;
-      font-size: 13.5px;
-      color: var(--text-secondary);
-      line-height: 1.55;
-    }
-    .modal-criteria-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin: 10px 0 12px;
-    }
+    .warning-dialog-body { padding: 20px; font-size: 13.5px; color: var(--text-secondary); line-height: 1.55; }
+    .modal-criteria-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 12px; }
     .warning-reason-box {
       background: var(--bg-subtle);
       border: 1px solid var(--border-default);
@@ -1081,7 +900,7 @@
       color: var(--text-primary);
     }
     .modal-quote-preview {
-      background: #f8fafc;
+      background: #f9fafb;
       border: 1px solid var(--border-default);
       border-radius: var(--radius-md);
       padding: 10px 13px;
@@ -1099,36 +918,25 @@
       border-top: 1px solid var(--border-default);
       margin-top: 14px;
     }
-    .form-field {
-      margin-bottom: 12px;
-    }
-    .form-field label {
-      display: block;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 5px;
-    }
+    .form-field { margin-bottom: 12px; }
+    .form-field label { display: block; font-size: 12px; font-weight: 700; color: var(--text-primary); margin-bottom: 5px; }
     .form-control {
       width: 100%;
       border: 1px solid var(--border-strong);
       border-radius: var(--radius-sm);
       padding: 8px 11px;
       font-size: 13px;
-      font-family: inherit;
       color: var(--text-primary);
       background: #ffffff;
       outline: none;
     }
-    .form-control:focus {
-      border-color: var(--brand-pill);
-      box-shadow: 0 0 0 3px rgba(59, 102, 224, 0.12);
-    }
+    .form-control:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1); }
 
-    @media (max-width: 1024px) {
-      .feed-grid, .create-grid, .mod-grid, .analysis-cols {
+    @media (max-width: 1080px) {
+      .feed-three-col, .create-grid, .mod-split-workspace, .analysis-cols, .case-switcher-bar {
         grid-template-columns: 1fr;
       }
+      .top-nav-tabs { display: none; }
     }
   </style>
 </head>
@@ -1139,7 +947,7 @@
        =================================================================== -->
   <div class="presenter-bar">
     <div class="presenter-group">
-      <span class="presenter-label">Figma Screen</span>
+      <span class="presenter-label">Screen</span>
       <div class="pill-switch">
         <button class="p-btn active" id="sbtn-1" onclick="jumpScreen(1)">1. Social Feed</button>
         <button class="p-btn" id="sbtn-2" onclick="jumpScreen(2)">2. Create Post</button>
@@ -1151,7 +959,7 @@
     </div>
 
     <div class="presenter-group">
-      <span class="presenter-label">Load Scenario</span>
+      <span class="presenter-label">Scenario</span>
       <div class="pill-switch">
         <button class="p-btn" id="scenbtn-14" onclick="loadScenario(14)">Scenario 14: Tech Review</button>
         <button class="p-btn scen-active" id="scenbtn-5" onclick="loadScenario(5)">Scenario 5: Unverified Rumor</button>
@@ -1161,590 +969,552 @@
   </div>
 
   <!-- ===================================================================
-       2. APP SHELL: CONSTANT NAVY SIDEBAR + MAIN COLUMN
+       2. TOP HORIZONTAL APP HEADER (Original Civic Teal Identity)
        =================================================================== -->
-  <div class="app-shell">
-
-    <aside class="left-sidebar">
-      <div>
-        <div class="brand" onclick="jumpScreen(1)">
-          <div class="brand-logo">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-          </div>
-          <div class="brand-text">
-            <span class="brand-name">CampusConnect</span>
-            <span class="brand-sub">Think before you post</span>
-          </div>
-        </div>
-
-        <div class="nav-section-header">Menu</div>
-        <div class="nav-list">
-          <button class="side-link active" id="lnav-1" onclick="jumpScreen(1)">
-            <span class="side-link-left">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-              <span>Feed</span>
-            </span>
-          </button>
-
-          <button class="side-link" id="lnav-2" onclick="jumpScreen(2)">
-            <span class="side-link-left">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-              <span>Create Post</span>
-            </span>
-          </button>
-
-          <button class="side-link" id="lnav-4" onclick="jumpScreen(4)">
-            <span class="side-link-left">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-              <span>Moderation</span>
-            </span>
-            <span class="side-pill-count">3</span>
-          </button>
-
-          <button class="side-link" id="lnav-5" onclick="jumpScreen(5)">
-            <span class="side-link-left">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-              <span>Decisions &amp; Appeals</span>
-            </span>
-          </button>
-
-          <button class="side-link" id="lnav-6" onclick="jumpScreen(6)">
-            <span class="side-link-left">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-              <span>Scenario Analysis</span>
-            </span>
-          </button>
-        </div>
+  <header class="app-topbar">
+    <div class="brand" onclick="jumpScreen(1)">
+      <div class="brand-logo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="M9 12l2 2 4-4"/>
+        </svg>
       </div>
-
-      <div class="sidebar-legal-card">
-        <div class="sidebar-legal-title">Chapter VI • RA 10175</div>
-        <div>Cyber Libel &amp; Freedom of Expression principles guide every moderation decision.</div>
-        <div class="sidebar-group-meta">BSIT 4C • Group 4 © 2026</div>
-      </div>
-    </aside>
-
-    <!-- MAIN COLUMN -->
-    <div class="main-column">
-      <header class="app-navbar">
-        <h1 class="page-heading" id="pageHeading">Campus Feed</h1>
-        <div class="nav-right">
-          <div class="search-wrapper">
-            <span class="search-icon">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            </span>
-            <input type="text" class="search-input" placeholder="Search CampusConnect" />
-          </div>
-          <button class="icon-btn" onclick="jumpScreen(4)" title="Moderation Queue">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-            <span class="notif-counter">3</span>
-          </button>
-          <button class="user-avatar-btn" onclick="jumpScreen(1)" title="Tristan Amiel Clemen • Student Moderator">TC</button>
-        </div>
-      </header>
-
-      <main class="center-scroll" id="centerScroll">
-
-        <!-- ===============================================================
-             SCREEN 1: CAMPUS FEED
-             =============================================================== -->
-        <section class="view active" id="view-1">
-          <div class="feed-grid">
-            <div class="feed-main">
-              <div class="card composer-trigger-card">
-                <div class="avatar">TC</div>
-                <button class="composer-trigger-btn" onclick="jumpScreen(2)">
-                  What's on your mind, CampusConnect?
-                </button>
-                <button class="btn btn-primary" onclick="jumpScreen(2)">+ Create Post</button>
-              </div>
-
-              <div class="label-filter-bar">
-                <span>Moderation labels:</span>
-                <span class="label-chip badge-allow">Protected Critique</span>
-                <span class="label-chip badge-flag">Unverified Claim</span>
-                <span class="label-chip badge-remove">False Accusation</span>
-                <span class="label-chip badge-info">Human Review</span>
-              </div>
-
-              <!-- Scenario 14 Post -->
-              <article class="card feed-card">
-                <div class="feed-card-header">
-                  <div class="feed-author-wrap">
-                    <div class="avatar" style="background:#dcfce7; color:#15803d;">CM</div>
-                    <div>
-                      <div class="feed-author-name">Carlos Mendoza</div>
-                      <div class="feed-author-meta">@carlos.mendoza • 2h • Public</div>
-                    </div>
-                  </div>
-                  <span class="queue-scen-pill">Scenario 14</span>
-                </div>
-                <p class="feed-body">
-                  Tech Review: University Portal v2.0 Quality &amp; Security — Our newly deployed campus app has severe latency spikes and exposed API endpoints. Attaching our performance benchmark results, screenshots, and recommendations for the developer team to patch.
-                </p>
-                <div class="feed-evidence-box">
-                  <div class="evidence-mini">
-                    <div class="evidence-mini-title">Benchmark Report (PDF)</div>
-                    <div class="evidence-mini-sub">Avg response: 4.8s under 200 users</div>
-                  </div>
-                  <div class="evidence-mini">
-                    <div class="evidence-mini-title">API Patch Notes</div>
-                    <div class="evidence-mini-sub">Recommended fix for student dev team</div>
-                  </div>
-                </div>
-                <div class="feed-meta-pills">
-                  <span class="status-badge badge-allow"><span class="status-dot"></span>Allowed Post</span>
-                  <span class="meta-pill-muted">Evidence-based critique</span>
-                </div>
-                <div class="feed-actions">
-                  <div class="feed-action-group">
-                    <button class="action-pill-btn">Like (194)</button>
-                    <button class="action-pill-btn">Comment (42)</button>
-                    <button class="action-pill-btn">Share</button>
-                  </div>
-                  <button class="action-pill-btn report" onclick="reportPost(14)">Inspect Case</button>
-                </div>
-              </article>
-
-              <!-- Scenario 5 Post -->
-              <article class="card feed-card">
-                <div class="feed-card-header">
-                  <div class="feed-author-wrap">
-                    <div class="avatar" style="background:#fef3c7; color:#b45309;">JV</div>
-                    <div>
-                      <div class="feed-author-name">Jessa Villanueva</div>
-                      <div class="feed-author-meta">@jessa.v • 4h • Public</div>
-                    </div>
-                  </div>
-                  <span class="queue-scen-pill">Scenario 5</span>
-                </div>
-                <p class="feed-body">
-                  I just received an anonymous message claiming that Registrar staff member Mr. Hector Dizon has been manipulating students' final grades. Sharing this here so everyone knows what is circulating!
-                </p>
-                <div class="feed-meta-pills">
-                  <span class="status-badge badge-flag"><span class="status-dot"></span>Flagged for Human Review</span>
-                  <span class="meta-pill-muted">214 shares</span>
-                </div>
-                <div class="feed-actions">
-                  <div class="feed-action-group">
-                    <button class="action-pill-btn">Like (142)</button>
-                    <button class="action-pill-btn">Comment (53)</button>
-                    <button class="action-pill-btn">Share</button>
-                  </div>
-                  <button class="action-pill-btn report" onclick="reportPost(5)">Report / Review</button>
-                </div>
-              </article>
-
-              <!-- Scenario 11 Post -->
-              <article class="card feed-card">
-                <div class="feed-card-header">
-                  <div class="feed-author-wrap">
-                    <div class="avatar" style="background:#fee2e2; color:#b91c1c;">RD</div>
-                    <div>
-                      <div class="feed-author-name">Ryan Dela Cruz</div>
-                      <div class="feed-author-meta">@ryan.dc • 5h • Reposted with caption</div>
-                    </div>
-                  </div>
-                  <span class="queue-scen-pill">Scenario 11</span>
-                </div>
-                <p class="feed-body">
-                  Not only did Mr. Ramon Santos commit misconduct—I know for a fact he also embezzled ₱50,000 from the scholarship fund! Everyone should share this!
-                </p>
-                <div class="feed-meta-pills">
-                  <span class="status-badge badge-remove"><span class="status-dot"></span>Removed After Review</span>
-                  <span class="meta-pill-muted">Reported ×6 • Appeal available</span>
-                </div>
-                <div class="feed-actions">
-                  <div class="feed-action-group">
-                    <button class="action-pill-btn">Like (31)</button>
-                    <button class="action-pill-btn">Comment (19)</button>
-                  </div>
-                  <button class="action-pill-btn report" onclick="reportPost(11)">View Decision</button>
-                </div>
-              </article>
-            </div>
-
-            <!-- Right Widgets Column -->
-            <div class="feed-side">
-              <div class="navy-widget-card">
-                <h3>Freedom of expression, protected</h3>
-                <p>Negative opinions and technical reviews are welcome. CampusConnect only steps in for unverified accusations naming real people or knowingly false claims.</p>
-              </div>
-
-              <div class="card widget-card">
-                <div class="widget-title">Open cases</div>
-                <div class="open-report-row" onclick="reportPost(14)">
-                  <span class="dot-ind" style="background:var(--allow-dot);"></span>
-                  <span>Scenario 14 • Tech blog critique</span>
-                </div>
-                <div class="open-report-row" onclick="reportPost(5)">
-                  <span class="dot-ind" style="background:var(--flag-dot);"></span>
-                  <span>Scenario 5 • Unverified rumor</span>
-                </div>
-                <div class="open-report-row" onclick="reportPost(11)">
-                  <span class="dot-ind" style="background:var(--remove-dot);"></span>
-                  <span>Scenario 11 • False repost claim</span>
-                </div>
-                <button class="btn btn-gold" style="width:100%; margin-top:12px;" onclick="jumpScreen(4)">
-                  Open Moderation Dashboard
-                </button>
-              </div>
-
-              <div class="soft-blue-card">
-                <h4>Think before you share</h4>
-                <p>Adding or sharing a knowingly false accusation about an identifiable person can create cyber libel liability.</p>
-              </div>
-
-              <div class="card widget-card">
-                <div class="widget-title">Group Members (BSIT 4C – G4)</div>
-                <div class="member-row"><div class="member-av">JA</div><span>Julianna Joyce Alasan</span></div>
-                <div class="member-row"><div class="member-av">TC</div><span>Tristan Amiel Clemen</span></div>
-                <div class="member-row"><div class="member-av">PM</div><span>Penelope Macarayan</span></div>
-                <div class="member-row"><div class="member-av">JP</div><span>Joselito Pechares Jr.</span></div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- ===============================================================
-             SCREEN 2: CREATE A POST
-             =============================================================== -->
-        <section class="view" id="view-2">
-          <div class="create-grid">
-            <div class="card create-card">
-              <h2>Write your post</h2>
-              <div class="feed-author-wrap">
-                <div class="avatar">TC</div>
-                <div>
-                  <div class="feed-author-name">You (Student)</div>
-                  <div class="feed-author-meta">Posting to Public • BSIT 4C</div>
-                </div>
-              </div>
-
-              <textarea id="composerInput" class="composer-textarea" oninput="syncLivePreview()"></textarea>
-
-              <div id="composerAttachments" class="feed-evidence-box" style="display:none;">
-                <div class="evidence-mini">
-                  <div class="evidence-mini-title">Latency_Benchmark.png</div>
-                  <div class="evidence-mini-sub">Attached technical proof</div>
-                </div>
-                <div class="evidence-mini">
-                  <div class="evidence-mini-title">API_Audit_Notes.txt</div>
-                  <div class="evidence-mini-sub">Patch recommendations</div>
-                </div>
-              </div>
-
-              <div class="composer-tools-row">
-                <div class="tool-chips">
-                  <button class="tool-chip" onclick="toggleAttachmentPreview()">+ Add photo / proof</button>
-                  <button class="tool-chip" onclick="loadScenario(14)">Test Scen 14</button>
-                  <button class="tool-chip" onclick="loadScenario(5)">Test Scen 5</button>
-                  <button class="tool-chip" onclick="loadScenario(11)">Test Scen 11</button>
-                </div>
-                <span id="charCount" style="font-size:12px; color:var(--text-muted);">0 / 500</span>
-              </div>
-
-              <div class="precheck-notice">
-                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0; margin-top:1px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                <span>Posts that name a person and make a serious accusation are checked before publishing. Evidence-based criticism and opinions are welcome.</span>
-              </div>
-
-              <div style="display:flex; justify-content:flex-end; gap:10px;">
-                <button class="btn btn-secondary" onclick="jumpScreen(1)">Cancel</button>
-                <button class="btn btn-primary" onclick="submitComposerPost()">Publish</button>
-              </div>
-            </div>
-
-            <div class="card widget-card" style="padding:20px;">
-              <div class="widget-title">Live preview</div>
-              <div class="mod-quoted-post" style="margin-bottom:18px;">
-                <div class="feed-author-wrap" style="margin-bottom:8px;">
-                  <div class="avatar" style="width:28px; height:28px; font-size:10px;">TC</div>
-                  <div class="feed-author-meta"><strong>You</strong> • just now</div>
-                </div>
-                <p id="livePreviewText" style="font-size:12.5px; color:var(--text-secondary); line-height:1.5;"></p>
-                <span class="status-badge badge-flag" style="margin-top:8px;">Draft</span>
-              </div>
-
-              <div class="widget-title">What happens when you press Publish?</div>
-              <div class="step-list-item"><div class="step-num">1</div><span>CampusConnect scans for named persons, accusations, and attached proof.</span></div>
-              <div class="step-list-item"><div class="step-num">2</div><span>Evidence-based negative reviews publish immediately; risky accusations trigger a content warning.</span></div>
-              <div class="step-list-item" style="margin-bottom:0;"><div class="step-num">3</div><span>You can edit your post, request human review, or appeal any final removal.</span></div>
-            </div>
-          </div>
-        </section>
-
-        <!-- ===============================================================
-             SCREEN 4: MODERATION DASHBOARD
-             =============================================================== -->
-        <section class="view" id="view-4">
-          <div class="mod-grid">
-            <div class="queue-col">
-              <div class="queue-heading">Reported &amp; flagged posts</div>
-
-              <div class="queue-item" id="otab-14" onclick="loadScenario(14)">
-                <div class="queue-item-top">
-                  <span class="queue-scen-pill">Scenario 14</span>
-                  <span class="status-badge badge-allow">Allowed</span>
-                </div>
-                <div class="queue-item-title">Tech Blog Critique</div>
-                <div class="queue-item-author">Carlos Mendoza (student)</div>
-              </div>
-
-              <div class="queue-item active-tab" id="otab-5" onclick="loadScenario(5)">
-                <div class="queue-item-top">
-                  <span class="queue-scen-pill">Scenario 5</span>
-                  <span class="status-badge badge-flag">Reviewing</span>
-                </div>
-                <div class="queue-item-title">Unverified Rumor</div>
-                <div class="queue-item-author">Jessa Villanueva (student)</div>
-              </div>
-
-              <div class="queue-item" id="otab-11" onclick="loadScenario(11)">
-                <div class="queue-item-top">
-                  <span class="queue-scen-pill">Scenario 11</span>
-                  <span class="status-badge badge-remove">Pending</span>
-                </div>
-                <div class="queue-item-title">False Repost Accusation</div>
-                <div class="queue-item-author">Ryan Dela Cruz (student)</div>
-              </div>
-
-              <div class="navy-widget-card" style="margin-top:4px; padding:15px 16px;">
-                <div style="font-size:20px; font-weight:800; color:var(--gold-bright);">3 cases</div>
-                <div style="font-size:12px; color:#cbd5f5;">Human review &amp; due process queue</div>
-              </div>
-            </div>
-
-            <div class="card mod-detail-card">
-              <div class="mod-detail-header">
-                <div class="mod-title-group">
-                  <div class="mod-icon-badge">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18"></path><path d="M5 7h14"></path><path d="M3 13l2-6 2 6a2 2 0 0 1-4 0z"></path><path d="M17 13l2-6 2 6a2 2 0 0 1-4 0z"></path></svg>
-                  </div>
-                  <div>
-                    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-                      <h2 style="font-size:16px; font-weight:700;" id="modCaseLabel">Case #RPT-2026-00215</h2>
-                      <span id="modAlertPill" class="status-badge badge-flag"><span class="status-dot"></span>Flagged: Questionable Unverified Rumor</span>
-                    </div>
-                    <div style="font-size:12px; color:var(--text-muted);" id="modSub">BSIT 3rd Year • Reported by 3 users • Public Feed</div>
-                  </div>
-                </div>
-                <div style="display:flex; gap:6px;">
-                  <button class="btn btn-secondary" style="padding:6px 11px; font-size:12px;" onclick="stepScenario(-1)">&lsaquo; Prev</button>
-                  <button class="btn btn-secondary" style="padding:6px 11px; font-size:12px;" onclick="stepScenario(1)">Next &rsaquo;</button>
-                </div>
-              </div>
-
-              <div class="mod-quoted-post">
-                <div class="feed-author-wrap" style="margin-bottom:8px;">
-                  <div class="avatar" id="modAvatar" style="width:32px; height:32px; font-size:11px;">JV</div>
-                  <div>
-                    <div class="feed-author-name" style="font-size:13px;" id="modAuthor">Jessa Villanueva</div>
-                  </div>
-                </div>
-                <p id="modText" style="font-size:13.5px; color:var(--text-primary); line-height:1.55;"></p>
-              </div>
-
-              <div class="kv-grid">
-                <div class="kv-key">Case / Report ID</div>
-                <div class="kv-val" style="font-family:monospace;" id="modTableId">RPT-2026-00215</div>
-                <div class="kv-key">Report Reason</div>
-                <div class="kv-val" id="modReason"></div>
-                <div class="kv-key">Named Target</div>
-                <div class="kv-val" id="modTarget"></div>
-                <div class="kv-key">Identifiability</div>
-                <div class="kv-val" id="modIdent"></div>
-                <div class="kv-key">Evidence</div>
-                <div class="kv-val" id="modEvidence"></div>
-              </div>
-
-              <div class="criteria-header-row">
-                <div class="checklist-heading">Chapter VI Cyber Libel &amp; Human Review Criteria</div>
-                <span class="status-badge badge-flag" id="criteriaScoreBadge">4 / 4 Elements • High Risk</span>
-              </div>
-              <div class="criteria-progress-track">
-                <div class="criteria-progress-fill" id="criteriaProgressFill"></div>
-              </div>
-
-              <div class="checklist-rows">
-                <label class="check-row" id="lcard-1" onclick="toggleCheckCard(1, event)">
-                  <input type="checkbox" id="chk1" />
-                  <span class="check-row-label">1. Defamatory Imputation</span>
-                  <span class="check-pill" id="cpill-1">No</span>
-                  <span id="cdesc-1" style="color:var(--text-muted);">Accuses a person of a discreditable act or crime</span>
-                </label>
-                <label class="check-row" id="lcard-2" onclick="toggleCheckCard(2, event)">
-                  <input type="checkbox" id="chk2" />
-                  <span class="check-row-label">2. Publication</span>
-                  <span class="check-pill" id="cpill-2">No</span>
-                  <span id="cdesc-2" style="color:var(--text-muted);">Shared publicly or reposted to third parties</span>
-                </label>
-                <label class="check-row" id="lcard-3" onclick="toggleCheckCard(3, event)">
-                  <input type="checkbox" id="chk3" />
-                  <span class="check-row-label">3. Identifiability</span>
-                  <span class="check-pill" id="cpill-3">No</span>
-                  <span id="cdesc-3" style="color:var(--text-muted);">Named individual can be clearly identified</span>
-                </label>
-                <label class="check-row" id="lcard-4" onclick="toggleCheckCard(4, event)">
-                  <input type="checkbox" id="chk4" />
-                  <span class="check-row-label">4. Malice / Reckless Disregard</span>
-                  <span class="check-pill" id="cpill-4">No</span>
-                  <span id="cdesc-4" style="color:var(--text-muted);">Knowingly false or unverified accusation</span>
-                </label>
-              </div>
-
-              <div class="criteria-subgrid">
-                <div class="criteria-mini-card">
-                  <div class="criteria-mini-label">Evidence Standard</div>
-                  <div class="criteria-mini-val" id="critEvidenceStd">Unverified rumor</div>
-                </div>
-                <div class="criteria-mini-card">
-                  <div class="criteria-mini-label">Expression Protection</div>
-                  <div class="criteria-mini-val" id="critExprProt">Needs Verification</div>
-                </div>
-                <div class="criteria-mini-card">
-                  <div class="criteria-mini-label">Due Process Path</div>
-                  <div class="criteria-mini-val" id="critDueProcess">Human Review Queue</div>
-                </div>
-              </div>
-
-              <div class="mod-guidance-box" id="modGuidanceBox">
-                <strong>Human Review Guidance:</strong> Check whether verifiable proof exists, hear the author's context, and apply the least restrictive lawful outcome.
-              </div>
-
-              <div class="mod-cta-row">
-                <button class="btn cta-allow" onclick="applyDecision('allow')">&#10003; Allow Post</button>
-                <button class="btn cta-flag" onclick="applyDecision('flag')">&#9873; Flag for Human Review</button>
-                <button class="btn cta-remove" onclick="applyDecision('remove')">&#10005; Remove / Restrict</button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- ===============================================================
-             SCREEN 5: DECISION & APPEAL
-             =============================================================== -->
-        <section class="view" id="view-5">
-          <div class="decision-banner" id="decBanner">
-            <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:6px;">
-              <h2 id="decTitle">Post Flagged for Human Review (Pending Verification)</h2>
-              <span class="meta-pill-muted" id="decCaseId" style="font-family:monospace;">Case #RPT-2026-00215</span>
-            </div>
-            <p id="decDesc" style="font-size:13.5px; color:var(--text-secondary); line-height:1.55;"></p>
-          </div>
-
-          <div class="card" style="padding:20px 22px; margin-bottom:16px;">
-            <div class="widget-title" style="margin-bottom:8px;">Reviewed Content</div>
-            <div style="font-size:12px; color:var(--text-muted); margin-bottom:6px;" id="decAuthor"></div>
-            <p id="decText" style="font-size:13.5px; color:var(--text-primary); font-style:italic; background:var(--bg-subtle); padding:12px 14px; border-radius:var(--radius-md); border:1px solid var(--border-default);"></p>
-          </div>
-
-          <div class="card" style="padding:20px 22px; margin-bottom:16px;">
-            <div class="widget-title" style="margin-bottom:8px;">Legal Rationale &amp; Written Explanation (Chapter VI)</div>
-            <p id="decRationale" style="font-size:13.5px; color:var(--text-secondary); line-height:1.6;"></p>
-          </div>
-
-          <div class="card" style="padding:20px 22px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px;">
-            <div>
-              <div class="widget-title" style="margin-bottom:3px;">Due Process &amp; Formal Appeal Option</div>
-              <div style="font-size:12.5px; color:var(--text-muted);">Authors may submit verified evidence or request an independent review panel within 7 days.</div>
-            </div>
-            <div style="display:flex; gap:10px;">
-              <button class="btn btn-secondary" onclick="jumpScreen(4)">Back to Dashboard</button>
-              <button class="btn btn-primary" onclick="submitAppealDemo()">Submit Written Appeal</button>
-            </div>
-          </div>
-        </section>
-
-        <!-- ===============================================================
-             SCREEN 6: SCENARIO ANALYSIS
-             =============================================================== -->
-        <section class="view" id="view-6">
-          <div class="analysis-hero">
-            <h2>Three scenarios, three moderation outcomes</h2>
-            <p>Not all negative posts should be removed. CampusConnect protects lawful criticism, flags questionable accusations for human review, and removes knowingly false claims with explanation and appeal.</p>
-          </div>
-
-          <div class="analysis-cols">
-            <!-- Scenario 14 -->
-            <div class="card analysis-card">
-              <div><span class="status-badge badge-allow"><span class="status-dot"></span>Allow Post</span></div>
-              <h3>Scenario 14 • Tech Blog Criticism</h3>
-              <div>
-                <div class="analysis-sec-label" style="color:var(--allow-text);">What happened?</div>
-                <div class="analysis-sec-text">A student tech blog criticized the newly deployed campus app's latency and security flaws, attaching benchmarks and patch recommendations.</div>
-              </div>
-              <div>
-                <div class="analysis-sec-label" style="color:var(--allow-text);">Lawful, defamatory or protected?</div>
-                <div class="analysis-sec-text">Protected expression: negative opinion and evidence-based product review, not a defamatory imputation against a person.</div>
-              </div>
-              <div>
-                <div class="analysis-sec-label" style="color:var(--allow-text);">Concepts applied</div>
-                <div class="analysis-sec-text">Fair comment on matters of public interest, absence of personal identifiability/malice, factual documentation.</div>
-              </div>
-              <div>
-                <div class="analysis-sec-label" style="color:var(--allow-text);">What should CampusConnect do?</div>
-                <div class="analysis-sec-text">Allow Post: publish without removal or restriction; reject takedown demands made solely over negative feedback.</div>
-              </div>
-              <button class="btn btn-secondary" style="margin-top:auto;" onclick="loadScenario(14); jumpScreen(4);">Inspect in Dashboard</button>
-            </div>
-
-            <!-- Scenario 5 -->
-            <div class="card analysis-card">
-              <div><span class="status-badge badge-flag"><span class="status-dot"></span>Flag for Review</span></div>
-              <h3>Scenario 5 • Unverified Rumor</h3>
-              <div>
-                <div class="analysis-sec-label" style="color:var(--flag-text);">What happened?</div>
-                <div class="analysis-sec-text">A student republished an anonymous rumor naming Registrar employee Mr. Hector Dizon for manipulating final grades without proof.</div>
-              </div>
-              <div>
-                <div class="analysis-sec-label" style="color:var(--flag-text);">Lawful, defamatory or protected?</div>
-                <div class="analysis-sec-text">Questionable accusation: names an identifiable employee and alleges dishonesty without verified facts, needing human evaluation.</div>
-              </div>
-              <div>
-                <div class="analysis-sec-label" style="color:var(--flag-text);">Concepts applied</div>
-                <div class="analysis-sec-text">Defamatory imputation, identifiability, republication, reckless disregard vs. good-faith verification.</div>
-              </div>
-              <div>
-                <div class="analysis-sec-label" style="color:var(--flag-text);">What should CampusConnect do?</div>
-                <div class="analysis-sec-text">Flag for Human Review: warn the author, limit viral sharing, and hold for moderator verification before final action.</div>
-              </div>
-              <button class="btn btn-secondary" style="margin-top:auto;" onclick="loadScenario(5); jumpScreen(4);">Inspect in Dashboard</button>
-            </div>
-
-            <!-- Scenario 11 -->
-            <div class="card analysis-card">
-              <div><span class="status-badge badge-remove"><span class="status-dot"></span>Remove / Restrict</span></div>
-              <h3>Scenario 11 • False Repost Claim</h3>
-              <div>
-                <div class="analysis-sec-label" style="color:var(--remove-text);">What happened?</div>
-                <div class="analysis-sec-text">While reposting, a user added a newly authored, knowingly false accusation claiming Mr. Ramon Santos embezzled ₱50,000.</div>
-              </div>
-              <div>
-                <div class="analysis-sec-label" style="color:var(--remove-text);">Lawful, defamatory or protected?</div>
-                <div class="analysis-sec-text">Defamatory: adding a new false crime accusation when sharing creates independent liability under Chapter VI.</div>
-              </div>
-              <div>
-                <div class="analysis-sec-label" style="color:var(--remove-text);">Concepts applied</div>
-                <div class="analysis-sec-text">Authoring new defamatory text on repost, actual malice (knowledge of falsity), identifiability, due process.</div>
-              </div>
-              <div>
-                <div class="analysis-sec-label" style="color:var(--remove-text);">What should CampusConnect do?</div>
-                <div class="analysis-sec-text">Remove / Restrict after human review, issue a clear written explanation citing policy, and provide a formal appeal option.</div>
-              </div>
-              <button class="btn btn-secondary" style="margin-top:auto;" onclick="loadScenario(11); jumpScreen(4);">Inspect in Dashboard</button>
-            </div>
-          </div>
-        </section>
-
-      </main>
+      <span class="brand-name">CampusConnect</span>
+      <span class="brand-pill">BSIT 4C • G4</span>
     </div>
-  </div>
+
+    <nav class="top-nav-tabs" aria-label="Primary navigation">
+      <button class="top-tab active" id="tnav-1" onclick="jumpScreen(1)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        <span>Feed</span>
+      </button>
+      <button class="top-tab" id="tnav-2" onclick="jumpScreen(2)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        <span>Create Post</span>
+      </button>
+      <button class="top-tab" id="tnav-4" onclick="jumpScreen(4)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        <span>Moderation</span>
+        <span class="tab-badge">3</span>
+      </button>
+      <button class="top-tab" id="tnav-5" onclick="jumpScreen(5)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        <span>Decision &amp; Appeal</span>
+      </button>
+      <button class="top-tab" id="tnav-6" onclick="jumpScreen(6)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+        <span>Scenario Analysis</span>
+      </button>
+    </nav>
+
+    <div class="nav-right">
+      <div class="search-wrapper">
+        <span class="search-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </span>
+        <input type="text" class="search-input" placeholder="Search posts or case ID..." />
+      </div>
+      <button class="icon-btn" onclick="jumpScreen(4)" title="Moderation Queue">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+        <span class="notif-counter">3</span>
+      </button>
+      <div class="user-chip" onclick="jumpScreen(1)">
+        <div class="user-chip-av">TC</div>
+        <span class="user-chip-name">Tristan</span>
+      </div>
+    </div>
+  </header>
 
   <!-- ===================================================================
-       SCREEN 3: CONTENT WARNING MODAL
+       3. SCROLLABLE WORKSPACE
+       =================================================================== -->
+  <main class="workspace-scroll" id="centerScroll">
+
+    <!-- =================================================================
+         SCREEN 1: 3-COLUMN SOCIAL FEED
+         ================================================================= -->
+    <section class="view active" id="view-1">
+      <div class="feed-three-col">
+
+        <!-- Left Column: Interactive Feed Filters & Team -->
+        <aside class="sticky-col">
+          <div class="card widget-card">
+            <div class="widget-title">Filter by Outcome</div>
+            <button class="filter-btn active" id="fbtn-all" onclick="filterFeed('all')">
+              <span>All Campus Posts</span><span>3</span>
+            </button>
+            <button class="filter-btn" id="fbtn-allow" onclick="filterFeed('allow')">
+              <span>Allowed Critique</span><span>1</span>
+            </button>
+            <button class="filter-btn" id="fbtn-flag" onclick="filterFeed('flag')">
+              <span>Flagged for Review</span><span>1</span>
+            </button>
+            <button class="filter-btn" id="fbtn-remove" onclick="filterFeed('remove')">
+              <span>Restricted / Appeal</span><span>1</span>
+            </button>
+          </div>
+
+          <div class="card widget-card">
+            <div class="widget-title">BSIT 4C • Group 4</div>
+            <div class="member-row"><div class="member-av">JA</div><span>Julianna Joyce Alasan</span></div>
+            <div class="member-row"><div class="member-av">TC</div><span>Tristan Amiel Clemen</span></div>
+            <div class="member-row"><div class="member-av">PM</div><span>Penelope Macarayan</span></div>
+            <div class="member-row"><div class="member-av">JP</div><span>Joselito Pechares Jr.</span></div>
+          </div>
+        </aside>
+
+        <!-- Center Column: Composer + Feed Stream -->
+        <div class="feed-main">
+          <div class="card compose-strip">
+            <div class="avatar">TC</div>
+            <button class="compose-trigger" onclick="jumpScreen(2)">
+              Share a campus concern, tech review, or discussion...
+            </button>
+            <button class="btn btn-primary" onclick="jumpScreen(2)">+ Create Post</button>
+          </div>
+
+          <!-- Scenario 14 Post -->
+          <article class="card feed-card accent-allow" data-outcome="allow">
+            <div class="feed-card-header">
+              <div class="feed-author-wrap">
+                <div class="avatar" style="background:#d1fae5; color:#047857;">CM</div>
+                <div>
+                  <div class="feed-author-name">Carlos Mendoza</div>
+                  <div class="feed-author-meta">@carlos.mendoza • 2h • Tech Blog</div>
+                </div>
+              </div>
+              <span class="status-badge badge-allow"><span class="status-dot"></span>Scenario 14 • Allowed</span>
+            </div>
+            <p class="feed-body">
+              Tech Review: University Portal v2.0 Quality &amp; Security — Our newly deployed campus app has severe latency spikes and exposed API endpoints. Attaching our performance benchmark results, screenshots, and recommendations for the developer team to patch.
+            </p>
+            <div class="feed-evidence-box">
+              <div class="evidence-mini">
+                <div class="evidence-mini-title">Benchmark_Report.pdf</div>
+                <div class="evidence-mini-sub">Avg response: 4.8s under 200 users</div>
+              </div>
+              <div class="evidence-mini">
+                <div class="evidence-mini-title">API_Patch_Notes.md</div>
+                <div class="evidence-mini-sub">Recommended fix for student dev team</div>
+              </div>
+            </div>
+            <div class="feed-actions">
+              <div style="display:flex; gap:6px;">
+                <button class="action-pill-btn">Like (194)</button>
+                <button class="action-pill-btn">Comment (42)</button>
+                <button class="action-pill-btn">Share</button>
+              </div>
+              <button class="action-pill-btn report" onclick="reportPost(14)">Inspect Case</button>
+            </div>
+          </article>
+
+          <!-- Scenario 5 Post -->
+          <article class="card feed-card accent-flag" data-outcome="flag">
+            <div class="feed-card-header">
+              <div class="feed-author-wrap">
+                <div class="avatar" style="background:#fef3c7; color:#b45309;">JV</div>
+                <div>
+                  <div class="feed-author-name">Jessa Villanueva</div>
+                  <div class="feed-author-meta">@jessa.v • 4h • 214 shares</div>
+                </div>
+              </div>
+              <span class="status-badge badge-flag"><span class="status-dot"></span>Scenario 5 • Flagged</span>
+            </div>
+            <p class="feed-body">
+              I just received an anonymous message claiming that Registrar staff member Mr. Hector Dizon has been manipulating students' final grades. Sharing this here so everyone knows what is circulating!
+            </p>
+            <div class="feed-actions">
+              <div style="display:flex; gap:6px;">
+                <button class="action-pill-btn">Like (142)</button>
+                <button class="action-pill-btn">Comment (53)</button>
+                <button class="action-pill-btn">Share</button>
+              </div>
+              <button class="action-pill-btn report" onclick="reportPost(5)">Review Case</button>
+            </div>
+          </article>
+
+          <!-- Scenario 11 Post -->
+          <article class="card feed-card accent-remove" data-outcome="remove">
+            <div class="feed-card-header">
+              <div class="feed-author-wrap">
+                <div class="avatar" style="background:#fee2e2; color:#b91c1c;">RD</div>
+                <div>
+                  <div class="feed-author-name">Ryan Dela Cruz</div>
+                  <div class="feed-author-meta">@ryan.dc • 5h • Reposted • Reported ×6</div>
+                </div>
+              </div>
+              <span class="status-badge badge-remove"><span class="status-dot"></span>Scenario 11 • Restricted</span>
+            </div>
+            <p class="feed-body">
+              Not only did Mr. Ramon Santos commit misconduct—I know for a fact he also embezzled ₱50,000 from the scholarship fund! Everyone should share this!
+            </p>
+            <div class="feed-actions">
+              <div style="display:flex; gap:6px;">
+                <button class="action-pill-btn">Like (31)</button>
+                <button class="action-pill-btn">Comment (19)</button>
+              </div>
+              <button class="action-pill-btn report" onclick="reportPost(11)">View Decision</button>
+            </div>
+          </article>
+        </div>
+
+        <!-- Right Column: Civic Guidelines & Queue -->
+        <aside class="sticky-col">
+          <div class="card widget-card" style="border-top:3px solid var(--brand);">
+            <div class="widget-title">Chapter VI Guidelines</div>
+            <div class="policy-item">
+              <div class="policy-num">1</div>
+              <div><strong>Criticism is protected:</strong> Negative software or service reviews with proof are never auto-removed.</div>
+            </div>
+            <div class="policy-item">
+              <div class="policy-num">2</div>
+              <div><strong>Verify rumors:</strong> Unverified accusations naming real people are held for human review.</div>
+            </div>
+            <div class="policy-item">
+              <div class="policy-num">3</div>
+              <div><strong>Due process:</strong> Removals include a written legal explanation and 7-day appeal.</div>
+            </div>
+          </div>
+
+          <div class="card widget-card">
+            <div class="widget-title">Active Moderation Queue</div>
+            <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">
+              3 cases ready for Chapter VI review across Scenarios 14, 5, and 11.
+            </p>
+            <button class="btn btn-primary" style="width:100%;" onclick="jumpScreen(4)">
+              Open Moderation Dashboard &rarr;
+            </button>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+    <!-- =================================================================
+         SCREEN 2: CREATE A POST STUDIO
+         ================================================================= -->
+    <section class="view" id="view-2">
+      <div class="stepper-bar">
+        <div class="step-pill current"><div class="step-num">1</div><span>Draft Post &amp; Attach Proof</span></div>
+        <div class="step-pill"><div class="step-num">2</div><span>Chapter VI Automated Pre-Check</span></div>
+        <div class="step-pill"><div class="step-num">3</div><span>Publish or Human Review</span></div>
+      </div>
+
+      <div class="create-grid">
+        <div class="card create-card">
+          <h2 style="font-size:16px; font-weight:700; margin-bottom:12px;">Compose Campus Post</h2>
+          <div class="feed-author-wrap">
+            <div class="avatar">TC</div>
+            <div>
+              <div class="feed-author-name">Tristan Amiel Clemen</div>
+              <div class="feed-author-meta">Posting to Public • BSIT 4C</div>
+            </div>
+          </div>
+
+          <textarea id="composerInput" class="composer-textarea" oninput="syncLivePreview()"></textarea>
+
+          <div id="composerAttachments" class="feed-evidence-box" style="display:none;">
+            <div class="evidence-mini">
+              <div class="evidence-mini-title">Latency_Benchmark.png</div>
+              <div class="evidence-mini-sub">Attached technical proof</div>
+            </div>
+            <div class="evidence-mini">
+              <div class="evidence-mini-title">API_Audit_Notes.txt</div>
+              <div class="evidence-mini-sub">Patch recommendations</div>
+            </div>
+          </div>
+
+          <div class="composer-tools-row">
+            <div class="tool-chips">
+              <button class="tool-chip" onclick="toggleAttachmentPreview()">+ Attach Proof</button>
+              <button class="tool-chip" onclick="loadScenario(14)">Load Scen 14</button>
+              <button class="tool-chip" onclick="loadScenario(5)">Load Scen 5</button>
+              <button class="tool-chip" onclick="loadScenario(11)">Load Scen 11</button>
+            </div>
+            <span id="charCount" style="font-size:12px; color:var(--text-muted);">0 / 500</span>
+          </div>
+
+          <div class="precheck-notice">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0; margin-top:1px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>Posts naming a person with an unverified or criminal accusation trigger a pre-publish warning. Evidence-based reviews publish immediately.</span>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:10px;">
+            <button class="btn btn-secondary" onclick="jumpScreen(1)">Cancel</button>
+            <button class="btn btn-primary" onclick="submitComposerPost()">Publish Post</button>
+          </div>
+        </div>
+
+        <div class="card widget-card" style="padding:20px;">
+          <div class="widget-title">Live Card Preview</div>
+          <div class="mod-quoted-post" style="margin-bottom:14px;">
+            <div class="feed-author-wrap" style="margin-bottom:8px;">
+              <div class="avatar" style="width:28px; height:28px; font-size:10px;">TC</div>
+              <div class="feed-author-meta"><strong>You</strong> • just now</div>
+            </div>
+            <p id="livePreviewText" style="font-size:12.5px; color:var(--text-secondary); line-height:1.5;"></p>
+            <span class="status-badge badge-flag" style="margin-top:8px;">Draft</span>
+          </div>
+          <div style="font-size:12px; color:var(--text-muted); line-height:1.5;">
+            Tip: Switch scenarios above to test how CampusConnect handles lawful criticism (Scenario 14), unverified rumors (Scenario 5), and false reposts (Scenario 11).
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         SCREEN 4: MODERATION DASHBOARD (Horizontal Case Bar + Split View)
+         ================================================================= -->
+    <section class="view" id="view-4">
+      <div class="case-switcher-bar">
+        <div class="case-tab-card" id="otab-14" onclick="loadScenario(14)">
+          <div class="case-tab-top">
+            <span class="status-badge badge-teal">Scenario 14</span>
+            <span class="status-badge badge-allow">Allowed</span>
+          </div>
+          <div class="case-tab-title">Tech Blog Critique</div>
+          <div class="case-tab-sub">Carlos Mendoza • Evidence-based</div>
+        </div>
+
+        <div class="case-tab-card active-tab" id="otab-5" onclick="loadScenario(5)">
+          <div class="case-tab-top">
+            <span class="status-badge badge-teal">Scenario 5</span>
+            <span class="status-badge badge-flag">Reviewing</span>
+          </div>
+          <div class="case-tab-title">Unverified Rumor</div>
+          <div class="case-tab-sub">Jessa Villanueva • Anonymous source</div>
+        </div>
+
+        <div class="case-tab-card" id="otab-11" onclick="loadScenario(11)">
+          <div class="case-tab-top">
+            <span class="status-badge badge-teal">Scenario 11</span>
+            <span class="status-badge badge-remove">Pending</span>
+          </div>
+          <div class="case-tab-title">False Repost Claim</div>
+          <div class="case-tab-sub">Ryan Dela Cruz • Added accusation</div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:6px; justify-content:center;">
+          <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px;" onclick="stepScenario(-1)">&lsaquo; Prev</button>
+          <button class="btn btn-secondary" style="padding:7px 12px; font-size:12px;" onclick="stepScenario(1)">Next &rsaquo;</button>
+        </div>
+      </div>
+
+      <div class="mod-split-workspace">
+        <!-- Left Panel: Post & Case Metadata -->
+        <div class="card mod-panel">
+          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:14px;">
+            <div>
+              <h2 style="font-size:16px; font-weight:700;" id="modCaseLabel">Case #RPT-2026-00215</h2>
+              <div style="font-size:12px; color:var(--text-muted);" id="modSub"></div>
+            </div>
+            <span id="modAlertPill" class="status-badge badge-flag"></span>
+          </div>
+
+          <div class="mod-quoted-post">
+            <div class="feed-author-wrap" style="margin-bottom:8px;">
+              <div class="avatar" id="modAvatar" style="width:32px; height:32px; font-size:11px;">JV</div>
+              <div class="feed-author-name" style="font-size:13px;" id="modAuthor"></div>
+            </div>
+            <p id="modText" style="font-size:13.3px; color:var(--text-primary); line-height:1.55;"></p>
+          </div>
+
+          <div class="kv-grid">
+            <div class="kv-key">Report ID</div>
+            <div class="kv-val" style="font-family:monospace;" id="modTableId"></div>
+            <div class="kv-key">Reason</div>
+            <div class="kv-val" id="modReason"></div>
+            <div class="kv-key">Target</div>
+            <div class="kv-val" id="modTarget"></div>
+            <div class="kv-key">Identifiability</div>
+            <div class="kv-val" id="modIdent"></div>
+            <div class="kv-key">Evidence</div>
+            <div class="kv-val" id="modEvidence"></div>
+          </div>
+
+          <div class="mod-guidance-box" id="modGuidanceBox"></div>
+        </div>
+
+        <!-- Right Panel: Chapter VI Review Criteria & Moderator Actions -->
+        <div class="card mod-panel">
+          <div class="criteria-header-row">
+            <div class="checklist-heading">Chapter VI Cyber Libel &amp; Review Criteria</div>
+            <span class="status-badge badge-flag" id="criteriaScoreBadge">4 / 4 Elements</span>
+          </div>
+          <div class="criteria-progress-track">
+            <div class="criteria-progress-fill" id="criteriaProgressFill"></div>
+          </div>
+
+          <div class="checklist-rows">
+            <label class="check-row" id="lcard-1" onclick="toggleCheckCard(1, event)">
+              <input type="checkbox" id="chk1" />
+              <span class="check-row-label">1. Defamatory Imputation</span>
+              <span class="check-pill" id="cpill-1">No</span>
+              <span id="cdesc-1" style="color:var(--text-muted);"></span>
+            </label>
+            <label class="check-row" id="lcard-2" onclick="toggleCheckCard(2, event)">
+              <input type="checkbox" id="chk2" />
+              <span class="check-row-label">2. Publication</span>
+              <span class="check-pill" id="cpill-2">No</span>
+              <span id="cdesc-2" style="color:var(--text-muted);"></span>
+            </label>
+            <label class="check-row" id="lcard-3" onclick="toggleCheckCard(3, event)">
+              <input type="checkbox" id="chk3" />
+              <span class="check-row-label">3. Identifiability</span>
+              <span class="check-pill" id="cpill-3">No</span>
+              <span id="cdesc-3" style="color:var(--text-muted);"></span>
+            </label>
+            <label class="check-row" id="lcard-4" onclick="toggleCheckCard(4, event)">
+              <input type="checkbox" id="chk4" />
+              <span class="check-row-label">4. Malice / Disregard</span>
+              <span class="check-pill" id="cpill-4">No</span>
+              <span id="cdesc-4" style="color:var(--text-muted);"></span>
+            </label>
+          </div>
+
+          <div class="criteria-subgrid">
+            <div class="criteria-mini-card">
+              <div class="criteria-mini-label">Evidence Standard</div>
+              <div class="criteria-mini-val" id="critEvidenceStd"></div>
+            </div>
+            <div class="criteria-mini-card">
+              <div class="criteria-mini-label">Expression Status</div>
+              <div class="criteria-mini-val" id="critExprProt"></div>
+            </div>
+            <div class="criteria-mini-card">
+              <div class="criteria-mini-label">Due Process Path</div>
+              <div class="criteria-mini-val" id="critDueProcess"></div>
+            </div>
+          </div>
+
+          <div class="mod-cta-row">
+            <button class="btn cta-allow" onclick="applyDecision('allow')">&#10003; Allow Post</button>
+            <button class="btn cta-flag" onclick="applyDecision('flag')">&#9873; Flag for Review</button>
+            <button class="btn cta-remove" onclick="applyDecision('remove')">&#10005; Remove / Restrict</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         SCREEN 5: DECISION & APPEAL
+         ================================================================= -->
+    <section class="view" id="view-5">
+      <div class="decision-banner" id="decBanner">
+        <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:6px;">
+          <h2 id="decTitle"></h2>
+          <span class="status-badge badge-teal" id="decCaseId" style="font-family:monospace;"></span>
+        </div>
+        <p id="decDesc" style="font-size:13.5px; color:var(--text-secondary); line-height:1.55;"></p>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
+        <div class="card" style="padding:20px;">
+          <div class="widget-title">Reviewed Statement</div>
+          <div style="font-size:12px; color:var(--text-muted); margin-bottom:8px;" id="decAuthor"></div>
+          <p id="decText" style="font-size:13.3px; color:var(--text-primary); font-style:italic; background:var(--bg-subtle); padding:12px 14px; border-radius:var(--radius-md); border:1px solid var(--border-default);"></p>
+        </div>
+
+        <div class="card" style="padding:20px;">
+          <div class="widget-title">Chapter VI Legal Rationale &amp; Explanation</div>
+          <p id="decRationale" style="font-size:13.3px; color:var(--text-secondary); line-height:1.6;"></p>
+        </div>
+      </div>
+
+      <div class="card" style="padding:18px 22px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px;">
+        <div>
+          <div class="widget-title" style="margin-bottom:2px;">Due Process &amp; 7-Day Written Appeal</div>
+          <div style="font-size:12.5px; color:var(--text-muted);">Authors may submit verified evidence or request an independent review panel within 7 days.</div>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-secondary" onclick="jumpScreen(4)">Back to Dashboard</button>
+          <button class="btn btn-primary" onclick="submitAppealDemo()">Submit Written Appeal</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================================================================
+         SCREEN 6: SCENARIO ANALYSIS
+         ================================================================= -->
+    <section class="view" id="view-6">
+      <div class="analysis-header-card">
+        <h2>Three Scenarios, Three Moderation Outcomes</h2>
+        <p>Not all negative posts should be removed. CampusConnect protects lawful criticism (Scenario 14), flags questionable accusations for human review (Scenario 5), and removes knowingly false reposts with explanation and appeal (Scenario 11).</p>
+      </div>
+
+      <div class="analysis-cols">
+        <div class="card analysis-card">
+          <div><span class="status-badge badge-allow"><span class="status-dot"></span>Allow Post</span></div>
+          <h3>Scenario 14 • Tech Blog Criticism</h3>
+          <div>
+            <div class="analysis-sec-label" style="color:var(--allow-text);">What happened?</div>
+            <div class="analysis-sec-text">A student tech blog criticized the newly deployed campus app's latency and security flaws, attaching benchmarks and patch recommendations.</div>
+          </div>
+          <div>
+            <div class="analysis-sec-label" style="color:var(--allow-text);">Lawful, defamatory or protected?</div>
+            <div class="analysis-sec-text">Protected expression: negative opinion and evidence-based product review, not a defamatory imputation against a person.</div>
+          </div>
+          <div>
+            <div class="analysis-sec-label" style="color:var(--allow-text);">Concepts applied</div>
+            <div class="analysis-sec-text">Fair comment on public interest, no personal identifiability or malice, factual documentation attached.</div>
+          </div>
+          <div>
+            <div class="analysis-sec-label" style="color:var(--allow-text);">CampusConnect action</div>
+            <div class="analysis-sec-text">Allow Post without restriction; reject takedown demands made solely over negative technical feedback.</div>
+          </div>
+          <button class="btn btn-secondary" style="margin-top:auto;" onclick="loadScenario(14); jumpScreen(4);">Inspect in Dashboard</button>
+        </div>
+
+        <div class="card analysis-card">
+          <div><span class="status-badge badge-flag"><span class="status-dot"></span>Flag for Review</span></div>
+          <h3>Scenario 5 • Unverified Rumor</h3>
+          <div>
+            <div class="analysis-sec-label" style="color:var(--flag-text);">What happened?</div>
+            <div class="analysis-sec-text">A student republished an anonymous rumor naming Registrar employee Mr. Hector Dizon for manipulating final grades without proof.</div>
+          </div>
+          <div>
+            <div class="analysis-sec-label" style="color:var(--flag-text);">Lawful, defamatory or protected?</div>
+            <div class="analysis-sec-text">Questionable accusation: names an identifiable employee and alleges dishonesty without verified facts, requiring human review.</div>
+          </div>
+          <div>
+            <div class="analysis-sec-label" style="color:var(--flag-text);">Concepts applied</div>
+            <div class="analysis-sec-text">Defamatory imputation, identifiability, republication, reckless disregard vs. good-faith verification.</div>
+          </div>
+          <div>
+            <div class="analysis-sec-label" style="color:var(--flag-text);">CampusConnect action</div>
+            <div class="analysis-sec-text">Display content warning and hold for human moderator verification before deciding whether to allow or restrict.</div>
+          </div>
+          <button class="btn btn-secondary" style="margin-top:auto;" onclick="loadScenario(5); jumpScreen(4);">Inspect in Dashboard</button>
+        </div>
+
+        <div class="card analysis-card">
+          <div><span class="status-badge badge-remove"><span class="status-dot"></span>Remove / Restrict</span></div>
+          <h3>Scenario 11 • False Repost Claim</h3>
+          <div>
+            <div class="analysis-sec-label" style="color:var(--remove-text);">What happened?</div>
+            <div class="analysis-sec-text">While reposting, a user added a newly authored, knowingly false accusation claiming Mr. Ramon Santos embezzled ₱50,000.</div>
+          </div>
+          <div>
+            <div class="analysis-sec-label" style="color:var(--remove-text);">Lawful, defamatory or protected?</div>
+            <div class="analysis-sec-text">Defamatory: adding a new false crime accusation when sharing creates independent liability under Chapter VI.</div>
+          </div>
+          <div>
+            <div class="analysis-sec-label" style="color:var(--remove-text);">Concepts applied</div>
+            <div class="analysis-sec-text">Authoring new defamatory text on repost, actual malice (knowledge of falsity), identifiability, due process.</div>
+          </div>
+          <div>
+            <div class="analysis-sec-label" style="color:var(--remove-text);">CampusConnect action</div>
+            <div class="analysis-sec-text">Remove / Restrict after human review, issue a written explanation citing policy, and provide a formal appeal option.</div>
+          </div>
+          <button class="btn btn-secondary" style="margin-top:auto;" onclick="loadScenario(11); jumpScreen(4);">Inspect in Dashboard</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================================================================
+       POPUP MODALS (Content Warning, Publish Success, Formal Appeal)
        =================================================================== -->
   <div class="modal-backdrop" id="warningModal" onclick="handleBackdropClick(event, 'warningModal')">
     <div class="warning-dialog" role="dialog" aria-modal="true" aria-labelledby="warningModalTitle">
@@ -1772,9 +1542,6 @@
     </div>
   </div>
 
-  <!-- ===================================================================
-       PUBLISH SUCCESS MODAL (Scenario 14 Protected Critique)
-       =================================================================== -->
   <div class="modal-backdrop" id="publishModal" onclick="handleBackdropClick(event, 'publishModal')">
     <div class="warning-dialog" role="dialog" aria-modal="true" aria-labelledby="publishModalTitle">
       <div class="warning-dialog-header modal-header-success">
@@ -1789,7 +1556,7 @@
         <div class="modal-criteria-chips">
           <span class="status-badge badge-allow"><span class="status-dot"></span>Evidence Attached</span>
           <span class="status-badge badge-allow"><span class="status-dot"></span>No Personal Defamation</span>
-          <span class="status-badge badge-info">Protected Fair Comment</span>
+          <span class="status-badge badge-teal">Protected Fair Comment</span>
         </div>
         <div class="warning-reason-box" style="border-left-color:var(--allow-dot);">
           Criticism of software latency and security backed by benchmarks and patch recommendations is lawful public-interest expression under Chapter VI.
@@ -1801,12 +1568,9 @@
     </div>
   </div>
 
-  <!-- ===================================================================
-       SUBMIT WRITTEN APPEAL MODAL (Due Process)
-       =================================================================== -->
   <div class="modal-backdrop" id="appealModal" onclick="handleBackdropClick(event, 'appealModal')">
     <div class="warning-dialog" role="dialog" aria-modal="true" aria-labelledby="appealModalTitle">
-      <div class="warning-dialog-header modal-header-navy">
+      <div class="warning-dialog-header modal-header-teal">
         <div class="modal-header-title" id="appealModalTitle">
           <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
           <span>Submit Formal Written Appeal</span>
@@ -1849,20 +1613,12 @@
   <script>
     let currentScenario = 5;
     const scenarioOrder = [14, 5, 11];
-    const pageTitles = {
-      1: "Campus Feed",
-      2: "Create a Post",
-      3: "Content Warning",
-      4: "Moderation Dashboard",
-      5: "Decision & Appeal",
-      6: "Scenario Analysis"
-    };
 
     const scenarios = {
       14: {
         author: "Carlos Mendoza",
         sub: "BSIT 4th Year • Tech Blog • Reported by Software Developer",
-        avatar: "CM", bg: "#f0fdf4", col: "#15803d",
+        avatar: "CM", bg: "#d1fae5", col: "#047857",
         text: "Tech Review: University Portal v2.0 Quality & Security — Our newly deployed campus app has severe latency spikes and exposed API endpoints. Attaching our performance benchmark results, screenshots, and recommendations for the developer team to patch.",
         hasAttachments: true,
         caseId: "Case #RPT-2026-00414",
@@ -1893,14 +1649,14 @@
       5: {
         author: "Jessa Villanueva",
         sub: "BSIT 3rd Year • Reported by 3 users • Public Feed",
-        avatar: "JV", bg: "#fffbeb", col: "#b45309",
+        avatar: "JV", bg: "#fef3c7", col: "#b45309",
         text: "I just received an anonymous message claiming that Registrar staff member Mr. Hector Dizon has been manipulating students' final grades. Sharing this here so everyone knows what is circulating!",
         hasAttachments: false,
         warnReason: "The statement naming <strong>Mr. Hector Dizon for allegedly manipulating grades</strong> repeats an <strong>unverified anonymous rumor</strong> without supporting proof and requires human moderator review.",
         warnChips: [
           `<span class="status-badge badge-flag"><span class="status-dot"></span>Named Employee</span>`,
           `<span class="status-badge badge-flag"><span class="status-dot"></span>Anonymous Source</span>`,
-          `<span class="status-badge badge-info">Human Review Required</span>`
+          `<span class="status-badge badge-teal">Human Review Required</span>`
         ],
         caseId: "Case #RPT-2026-00215",
         rawId: "RPT-2026-00215",
@@ -1929,14 +1685,14 @@
       11: {
         author: "Ryan Dela Cruz",
         sub: "BSCS 4th Year • Shared Post • Reported by 6 users",
-        avatar: "RD", bg: "#fef2f2", col: "#b91c1c",
+        avatar: "RD", bg: "#fee2e2", col: "#b91c1c",
         text: "Not only did Mr. Ramon Santos commit misconduct—I know for a fact he also embezzled ₱50,000 from the scholarship fund! Everyone should share this!",
         hasAttachments: false,
         warnReason: "While sharing an existing post differs from authoring one, your <strong>newly added accusation</strong> claiming <strong>Mr. Ramon Santos embezzled ₱50,000</strong> is an independent defamatory statement that requires human review.",
         warnChips: [
           `<span class="status-badge badge-remove"><span class="status-dot"></span>Newly Authored Claim</span>`,
           `<span class="status-badge badge-remove"><span class="status-dot"></span>Criminal Accusation</span>`,
-          `<span class="status-badge badge-info">Due Process &amp; Appeal</span>`
+          `<span class="status-badge badge-teal">Due Process &amp; Appeal</span>`
         ],
         caseId: "Case #RPT-2026-00511",
         rawId: "RPT-2026-00511",
@@ -1963,6 +1719,15 @@
         bannerBg: "var(--remove-bg)", bannerBorder: "var(--remove-border)", titleCol: "var(--remove-text)"
       }
     };
+
+    function filterFeed(outcome) {
+      ['all', 'allow', 'flag', 'remove'].forEach(k => {
+        document.getElementById('fbtn-' + k).classList.toggle('active', k === outcome);
+      });
+      document.querySelectorAll('.feed-card').forEach(card => {
+        card.style.display = (outcome === 'all' || card.dataset.outcome === outcome) ? 'block' : 'none';
+      });
+    }
 
     function updateCriteriaSummary() {
       let count = 0;
@@ -2073,7 +1838,6 @@
         const btn = document.getElementById('sbtn-' + i);
         if (btn) btn.classList.toggle('active', i === screenNum);
       }
-      document.getElementById('pageHeading').textContent = pageTitles[screenNum] || "CampusConnect";
 
       const warningModal = document.getElementById('warningModal');
       document.getElementById('publishModal').classList.remove('open');
@@ -2091,8 +1855,8 @@
     function showBaseView(viewNum) {
       [1, 2, 4, 5, 6].forEach(v => {
         document.getElementById('view-' + v).classList.toggle('active', v === viewNum);
-        const lnav = document.getElementById('lnav-' + v);
-        if (lnav) lnav.classList.toggle('active', v === viewNum);
+        const tnav = document.getElementById('tnav-' + v);
+        if (tnav) tnav.classList.toggle('active', v === viewNum);
       });
       document.getElementById('centerScroll').scrollTop = 0;
     }
